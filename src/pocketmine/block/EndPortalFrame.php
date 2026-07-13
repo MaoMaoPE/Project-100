@@ -13,7 +13,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author Project-100
+ * @author MaoMaoPE Team
  * @link https://github.com/MaoMaoPE/Project-100
  *
  * 

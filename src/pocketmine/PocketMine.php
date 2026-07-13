@@ -20,6 +20,23 @@
  * @link https://github.com/GenisysPro/GenisysPro
  *
  *
+ *
+ * 
+ *  ____                     _                 _             _    ___     ___  
+ * |  _ \   _ __    ___     (_)   ___    ___  | |_          / |  / _ \   / _ \ 
+ * | |_) | | '__|  / _ \    | |  / _ \  / __| | __|  _____  | | | | | | | | | |
+ * |  __/  | |    | (_) |   | | |  __/ | (__  | |_  |_____| | | | |_| | | |_| |
+ * |_|     |_|     \___/   _/ |  \___|  \___|  \__|         |_|  \___/   \___/ 
+ *                        |__/                                                 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author MaoMaoPE Team
+ * @link https://github.com/MaoMaoPE/Project-100
+ *
+ * 
 */
 
 namespace pocketmine {
