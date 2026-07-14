@@ -1328,34 +1328,38 @@ class Level implements ChunkManager, Metadatable{
 		return $this->getChunk($x >> 4, $z >> 4, false)->getFullBlock($x & 0x0f, $y & Level::Y_MASK, $z & 0x0f);
 	}
 
-	/**
-	 * Gets the Block object on the Vector3 location
-	 *
-	 * @param Vector3 $pos
-	 * @param boolean $cached
-	 *
-	 * @return Block
-	 */
-	public function getBlock(Vector3 $pos, $cached = true) : Block{
-		$pos = $pos->floor();
-		$index = Level::blockHash($pos->x, $pos->y, $pos->z);
-		if($cached and isset($this->blockCache[$index])){
-			return $this->blockCache[$index];
-		}elseif($pos->y >= 0 and $pos->y < $this->provider->getWorldHeight() and isset($this->chunks[$chunkIndex = Level::chunkHash($pos->x >> 4, $pos->z >> 4)])){
-			$fullState = $this->chunks[$chunkIndex]->getFullBlock($pos->x & 0x0f, $pos->y & Level::Y_MASK, $pos->z & 0x0f);
-		}else{
-			$fullState = 0;
-		}
+	 /**
+     * Gets the Block object on the Vector3 location
+     *
+     * @param Vector3 $pos
+     * @param boolean $cached
+     *
+     * @return Block
+     */
+    public function getBlock(Vector3 $pos, $cached = true): Block {
+        $pos = $pos->floor();
+        return $this->getBlockAt((int)$pos->x, (int) $pos->y, (int) $pos->z, $cached);
+    }
 
-		$block = clone $this->blockStates[$fullState & 0xfff];
+    public function getBlockAt(int $x, int $y, int $z, $cached = true) : Block {
+        $index = Level::blockHash($x, $y, $z);
+        if ($cached and isset($this->blockCache[$index])) {
+            return $this->blockCache[$index];
+        } elseif ($y >= 0 and $y < $this->provider->getWorldHeight() and isset($this->chunks[$chunkIndex = Level::chunkHash($x >> 4, $z >> 4)])) {
+            $fullState = $this->chunks[$chunkIndex]->getFullBlock($x & 0x0f, $y & Level::Y_MASK, $z & 0x0f);
+        } else {
+            $fullState = 0;
+        }
 
-		$block->x = $pos->x;
-		$block->y = $pos->y;
-		$block->z = $pos->z;
-		$block->level = $this;
+        $block = clone $this->blockStates[$fullState & 0xfff];
 
-		return $this->blockCache[$index] = $block;
-	}
+        $block->x = $x;
+        $block->y = $y;
+        $block->z = $z;
+        $block->level = $this;
+
+        return $this->blockCache[$index] = $block;
+    }
 
 	public function updateAllLight(Vector3 $pos){
 		$this->updateBlockSkyLight($pos->x, $pos->y, $pos->z);
