@@ -44,7 +44,7 @@ class CommandBlockUpdatePacket extends DataPacket{
 
 	public $shouldTrackOutput;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->isBlock = $this->getBool();
 
 		if($this->isBlock){
@@ -64,8 +64,8 @@ class CommandBlockUpdatePacket extends DataPacket{
 		$this->shouldTrackOutput = $this->getBool();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putBool($this->isBlock);
 
 		if($this->isBlock){

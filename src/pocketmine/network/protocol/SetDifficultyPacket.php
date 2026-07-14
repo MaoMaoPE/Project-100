@@ -29,12 +29,12 @@ class SetDifficultyPacket extends DataPacket{
 
 	public $difficulty;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->difficulty = $this->getUnsignedVarInt();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putUnsignedVarInt($this->difficulty);
 	}
 

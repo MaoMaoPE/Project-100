@@ -53,15 +53,15 @@ class PlayerActionPacket extends DataPacket{
 	public $z;
 	public $face;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->eid = $this->getEntityId();
 		$this->action = $this->getVarInt();
 		$this->getBlockCoords($this->x, $this->y, $this->z);
 		$this->face = $this->getVarInt();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->eid);
 		$this->putVarInt($this->action);
 		$this->putBlockCoords($this->x, $this->y, $this->z);

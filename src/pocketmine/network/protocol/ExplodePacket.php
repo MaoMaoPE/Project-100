@@ -38,12 +38,12 @@ class ExplodePacket extends DataPacket{
 		return parent::clean();
 	}
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putLFloat($this->radius);
 		$this->putUnsignedVarInt(count($this->records));

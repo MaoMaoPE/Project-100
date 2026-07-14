@@ -36,12 +36,12 @@ class AddItemEntityPacket extends DataPacket{
 	public $speedY;
 	public $speedZ;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->eid); //EntityUniqueID
 		$this->putEntityId($this->eid); //EntityRuntimeID
 		$this->putSlot($this->item);

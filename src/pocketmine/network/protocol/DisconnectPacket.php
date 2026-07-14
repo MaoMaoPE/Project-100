@@ -30,13 +30,13 @@ class DisconnectPacket extends DataPacket{
 	public $hideDisconnectionScreen = false;
 	public $message;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->hideDisconnectionScreen = $this->getBool();
 		$this->message = $this->getString();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putBool($this->hideDisconnectionScreen);
 		$this->putString($this->message);
 	}

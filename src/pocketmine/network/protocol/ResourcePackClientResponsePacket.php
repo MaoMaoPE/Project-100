@@ -36,7 +36,7 @@ class ResourcePackClientResponsePacket extends DataPacket{
     public $status;
     public $packIds = [];
 
-    public function decode(){
+    public function decode($protocol){
         $this->status = $this->getByte();
         $entryCount = $this->getLShort();
         while($entryCount-- > 0){
@@ -44,8 +44,8 @@ class ResourcePackClientResponsePacket extends DataPacket{
         }
     }
 
-    public function encode(){
-        $this->reset();
+    public function encode($protocol){
+        $this->reset($protocol);
         $this->putByte($this->status);
         $this->putLShort(count($this->packIds));
         foreach($this->packIds as $id){

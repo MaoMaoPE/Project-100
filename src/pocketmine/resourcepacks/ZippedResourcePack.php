@@ -81,8 +81,8 @@ class ZippedResourcePack implements ResourcePack{
 		$archive->close();
 
 		$manifest = json_decode($manifestData);
-		if(!self::verifyManifest($manifest)){
-			throw new \InvalidStateException("无法加载材质包 $zipPath: 主类错误或不完整");
+		if($manifest == null || !self::verifyManifest($manifest)){
+			throw new \InvalidStateException("无法加载材质包 $zipPath: 主类错误或不完整，如果主类没有错误，请检查是否有注释并删除注释");
 		}
 
 		$this->manifest = $manifest;

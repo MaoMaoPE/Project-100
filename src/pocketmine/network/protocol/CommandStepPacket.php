@@ -47,7 +47,7 @@ class CommandStepPacket extends DataPacket{
 	public $args; //JSON formatted command arguments
 	public $string4;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->command = $this->getString();
 		$this->overload = $this->getString();
 		$this->uvarint1 = $this->getUnsignedVarInt();
@@ -61,7 +61,7 @@ class CommandStepPacket extends DataPacket{
 		}
 	}
 
-	public function encode(){
+	public function encode($protocol){
 
 	}
 

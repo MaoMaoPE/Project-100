@@ -112,7 +112,7 @@ class CraftingManager{
 			$pk->addFurnaceRecipe($recipe);
 		}
 
-		$pk->encode();
+		$pk->encode(107);
 		$pk->isEncoded = true;
 
 		$this->craftingDataCache = $pk;

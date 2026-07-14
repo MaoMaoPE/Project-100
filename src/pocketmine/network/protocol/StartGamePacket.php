@@ -50,12 +50,12 @@ class StartGamePacket extends DataPacket{
 	public $unknown;
 	public $worldName;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->entityUniqueId); //EntityUniqueID
 		$this->putEntityId($this->entityRuntimeId); //EntityRuntimeID
 		$this->putVector3f($this->x, $this->y, $this->z);

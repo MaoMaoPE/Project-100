@@ -29,11 +29,11 @@ class PlayerFallPacket extends DataPacket{
 
 	public $fallDistance;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->fallDistance = $this->getLFloat();
 	}
 
-	public function encode(){
+	public function encode($protocol){
 
 	}
 }

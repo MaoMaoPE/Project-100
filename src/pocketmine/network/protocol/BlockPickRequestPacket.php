@@ -42,12 +42,12 @@ class BlockPickRequestPacket extends DataPacket{
 	public $z;
 	public $unknown;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->getBlockCoords($this->x, $this->y, $this->z);
 		$this->unknown = $this->getByte();
 	}
 
-	public function encode(){
+	public function encode($protocol){
 
 	}
 

@@ -51,7 +51,7 @@ class LoginPacket extends DataPacket{
 	public $deviceModel;
 	public $os;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->protocol = $this->getInt();
 		if(!in_array($this->protocol, Info::ACCEPTED_PROTOCOLS)){
 			$this->buffer = null;
@@ -122,7 +122,7 @@ class LoginPacket extends DataPacket{
 		}
 	}
 
-	public function encode(){
+	public function encode($protocol){
 
 	}
 

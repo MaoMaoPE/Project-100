@@ -32,12 +32,12 @@ class SetTimePacket extends DataPacket{
 	public $time;
 	public $started = true;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putVarInt($this->time);
 		$this->putBool($this->started);
 	}
