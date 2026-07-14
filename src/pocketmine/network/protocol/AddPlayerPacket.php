@@ -41,12 +41,12 @@ class AddPlayerPacket extends DataPacket{
 	public $item;
 	public $metadata = [];
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putUUID($this->uuid);
 		$this->putString($this->username);
 		$this->putEntityId($this->eid); //EntityUniqueID

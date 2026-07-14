@@ -42,7 +42,7 @@ class CraftingEventPacket extends DataPacket{
 		return parent::clean();
 	}
 
-	public function decode(){
+	public function decode($protocol){
 		$this->windowId = $this->getByte();
 		$this->type = $this->getVarInt();
 		$this->id = $this->getUUID();
@@ -58,7 +58,7 @@ class CraftingEventPacket extends DataPacket{
 		}
 	}
 
-	public function encode(){
+	public function encode($protocol){
 
 	}
 

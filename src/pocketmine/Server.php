@@ -2049,21 +2049,30 @@ class Server{
 	 * @param Player[]   $players
 	 * @param DataPacket $packet
 	 */
-	public function broadcastPacket(array $players, DataPacket $packet){
-		$packet->encode();
-		$packet->isEncoded = true;
-		if(Network::$BATCH_THRESHOLD >= 0 and strlen($packet->buffer) >= Network::$BATCH_THRESHOLD){
-			$this->batchPackets($players, [$packet->buffer], false);
-			return;
-		}
+    public function broadcastPacket(array $players, DataPacket $packet){
+        $protocol = null;
+        foreach($players as $p){
+            if($p->isConnected()){
+                $protocol = $p->getProtocol();
+                break;
+            }
+        }
 
-		foreach($players as $player){
-			$player->dataPacket($packet);
-		}
-		if(isset($packet->__encapsulatedPacket)){
-			unset($packet->__encapsulatedPacket);
-		}
-	}
+        $packet->encode($protocol ?? ProtocolInfo::CURRENT_PROTOCOL);
+        $packet->isEncoded = true;
+
+        if(Network::$BATCH_THRESHOLD >= 0 and strlen($packet->buffer) >= Network::$BATCH_THRESHOLD){
+            $this->batchPackets($players, [$packet->buffer], false);
+            return;
+        }
+
+        foreach($players as $player){
+            $player->dataPacket($packet);
+        }
+        if(isset($packet->__encapsulatedPacket)){
+            unset($packet->__encapsulatedPacket);
+        }
+    }
 
 	/**
 	 * Broadcasts a list of packets in a batch to a list of players
@@ -2072,50 +2081,67 @@ class Server{
 	 * @param DataPacket[]|string $packets
 	 * @param bool                $forceSync
 	 */
-	public function batchPackets(array $players, array $packets, $forceSync = false){
-		Timings::$playerNetworkTimer->startTiming();
-		$str = "";
+    public function batchPackets(array $players, array $packets, $forceSync = false){
+        Timings::$playerNetworkTimer->startTiming();
 
-		foreach($packets as $p){
-			if($p instanceof DataPacket){
-				if(!$p->isEncoded){
-					$p->encode();
-				}
-				$str .= Binary::writeUnsignedVarInt(strlen($p->buffer)) . $p->buffer;
-			}else{
-				$str .= Binary::writeUnsignedVarInt(strlen($p)) . $p;
-			}
-		}
+        $targets = [];
+        $protocol = null;
+        foreach($players as $p){
+            if($p->isConnected()){
+                $targets[] = $this->identifiers[spl_object_hash($p)];
+                if($protocol === null){
+                    $protocol = $p->getProtocol();
+                }
+            }
+        }
 
-		$targets = [];
-		foreach($players as $p){
-			if($p->isConnected()){
-				$targets[] = $this->identifiers[spl_object_hash($p)];
-			}
-		}
+        $str = "";
+        foreach($packets as $p){
+            if($p instanceof DataPacket){
+                if(!$p->isEncoded){
+                    $p->encode($protocol);
+                }
+                $str .= Binary::writeUnsignedVarInt(strlen($p->buffer)) . $p->buffer;
+            }else{
+                $str .= Binary::writeUnsignedVarInt(strlen($p)) . $p;
+            }
+        }
 
-		if(!$forceSync and $this->networkCompressionAsync){
-			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
-			$this->getScheduler()->scheduleAsyncTask($task);
-		}else{
-			$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);
-		}
+        if(!$forceSync and $this->networkCompressionAsync){
+            $task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
+            $this->getScheduler()->scheduleAsyncTask($task);
+        }else{
+            $this->broadcastPacketsCallback(
+                zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel),
+                $targets,
+                $protocol
+            );
+        }
 
-		Timings::$playerNetworkTimer->stopTiming();
-	}
+        Timings::$playerNetworkTimer->stopTiming();
+    }
 
-	public function broadcastPacketsCallback($data, array $identifiers){
-		$pk = new BatchPacket();
-		$pk->payload = $data;
-		$pk->encode();
-		$pk->isEncoded = true;
+    public function broadcastPacketsCallback($data, array $identifiers, $protocol = null){
+        if($protocol === null){
+            foreach($identifiers as $i){
+                if(isset($this->players[$i])){
+                    $protocol = $this->players[$i]->getProtocol();
+                    break;
+                }
+            }
+        }
 
-		foreach($identifiers as $i){
-			if(isset($this->players[$i])){
-				$this->players[$i]->dataPacket($pk);
-			}
-		}
-	}
+        $pk = new BatchPacket();
+        $pk->payload = $data;
+        $pk->encode($protocol);
+        $pk->isEncoded = true;
+
+        foreach($identifiers as $i){
+            if(isset($this->players[$i])){
+                $this->players[$i]->dataPacket($pk);
+            }
+        }
+    }
 
 
 	/**

@@ -39,7 +39,7 @@ class UpdateTradePacket extends DataPacket{
 	public $displayName;
 	public $offers;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->byte1 = $this->getByte();
 		$this->byte2 = $this->getByte();
 		$this->varint1 = $this->getVarInt();
@@ -51,8 +51,8 @@ class UpdateTradePacket extends DataPacket{
 		$this->offers = $this->get(true);
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putByte($this->byte1);
 		$this->putByte($this->byte2);
 		$this->putVarInt($this->varint1);

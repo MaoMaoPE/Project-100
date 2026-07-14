@@ -38,7 +38,7 @@ class ClientboundMapItemDataPacket extends DataPacket {
 	public $yOffset = 0;
 	/** @var Color[][] */
 	public $colors = [];
-	public function decode(){
+	public function decode($protocol){
 		$this->mapId = $this->getVarInt();
 		$this->type = $this->getUnsignedVarInt();
 		if(($this->type & self::BITFLAG_ENTITY_UPDATE) !== 0){
@@ -74,8 +74,8 @@ class ClientboundMapItemDataPacket extends DataPacket {
 			}
 		}
 	}
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putVarInt($this->mapId); //entity unique ID, signed var-int
 		$type = 0;
 		if(($eidsCount = count($this->eids)) > 0){

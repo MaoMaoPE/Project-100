@@ -60,7 +60,7 @@ use pocketmine\network\protocol\ExplodePacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\HurtArmorPacket;
 use pocketmine\network\protocol\Info;
-use pocketmine\network\protocol\Info as ProtocolInfo;
+use pocketmine\network\protocol\Info100;
 use pocketmine\network\protocol\InteractPacket;
 use pocketmine\network\protocol\InventoryActionPacket;
 use pocketmine\network\protocol\ItemFrameDropItemPacket;
@@ -121,7 +121,8 @@ class Network {
 	public static $BATCH_THRESHOLD = 512;
 
 	/** @var \SplFixedArray */
-	private $packetPool;
+	private $packetPool = [];
+	private $packetPool100 = [];
 
 	/** @var Server */
 	private $server;
@@ -238,6 +239,10 @@ class Network {
 		$this->packetPool[$id] = new $class;
 	}
 
+	public function registerPacket100($id, $class) {
+		$this->packetPool100[$id] = new $class;
+	}
+
 	public function getServer() {
 		return $this->server;
 	}
@@ -260,14 +265,15 @@ class Network {
 
 			while($stream->offset < $len){
 				$buf = $stream->getString();
-				if(($pk = $this->getPacket(ord($buf[0]))) !== null){
+				$protocol = $p->getProtocol() ?? Info::CURRENT_PROTOCOL;
+				if(($pk = $this->getPacket(ord($buf[0]), $protocol)) !== null){
 					if($pk::NETWORK_ID === Info::BATCH_PACKET){
 						throw new \InvalidStateException("Invalid BatchPacket inside BatchPacket");
 					}
 
 					$pk->setBuffer($buf, 1);
 
-					$pk->decode();
+					$pk->decode($protocol);
 					assert($pk->feof(), "Still " . strlen(substr($pk->buffer, $pk->offset)) . " bytes unread in " . get_class($pk));
 					$p->handleDataPacket($pk);
 				}
@@ -288,15 +294,28 @@ class Network {
 	 *
 	 * @return DataPacket
 	 */
-	public function getPacket($id) {
+	public function getPacket($id, $protocol) {
 		/** @var DataPacket $class */
-		$class = $this->packetPool[$id];
+		if (in_array($protocol, Info100::ACCEPTED_PROTOCOLS)) {
+		    $class = $this->packetPool100[$id];
+		} else {
+		    $class = $this->packetPool[$id];
+		}
 		if ($class !== null) {
 			return clone $class;
 		}
 		return null;
 	}
 
+	public function getPacketId($class, $protocol) {
+		if (in_array($protocol, Info100::ACCEPTED_PROTOCOLS)) {
+		    $id = array_search(new $class, $this->packetPool100);
+		} else {
+		    $id = array_search(new $class, $this->packetPool);
+		}
+		if (!$id) return null;
+		return $id;
+	}
 
 	/**
 	 * @param string $address
@@ -333,91 +352,169 @@ class Network {
 	}
 
 	private function registerPackets() {
-		$this->packetPool = new \SplFixedArray(256);
+		$this->registerPacket(Info::ADD_ENTITY_PACKET, AddEntityPacket::class);
+		$this->registerPacket(Info::ADD_HANGING_ENTITY_PACKET, AddHangingEntityPacket::class);
+		$this->registerPacket(Info::ADD_ITEM_ENTITY_PACKET, AddItemEntityPacket::class);
+		$this->registerPacket(Info::ADD_ITEM_PACKET, AddItemPacket::class);
+		$this->registerPacket(Info::ADD_PAINTING_PACKET, AddPaintingPacket::class);
+		$this->registerPacket(Info::ADD_PLAYER_PACKET, AddPlayerPacket::class);
+		$this->registerPacket(Info::ADVENTURE_SETTINGS_PACKET, AdventureSettingsPacket::class);
+		$this->registerPacket(Info::ANIMATE_PACKET, AnimatePacket::class);
+		$this->registerPacket(Info::AVAILABLE_COMMANDS_PACKET, AvailableCommandsPacket::class);
+		$this->registerPacket(Info::BATCH_PACKET, BatchPacket::class);
+		$this->registerPacket(Info::BLOCK_ENTITY_DATA_PACKET, BlockEntityDataPacket::class);
+		$this->registerPacket(Info::BLOCK_EVENT_PACKET, BlockEventPacket::class);
+ 		$this->registerPacket(Info::BOSS_EVENT_PACKET, BossEventPacket::class);
+		$this->registerPacket(Info::CAMERA_PACKET, CameraPacket::class);
+		$this->registerPacket(Info::CHANGE_DIMENSION_PACKET, ChangeDimensionPacket::class);
+		$this->registerPacket(Info::CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket::class);
+		$this->registerPacket(Info::CLIENTBOUND_MAP_ITEM_DATA_PACKET, ClientboundMapItemDataPacket::class);
+		$this->registerPacket(Info::CLIENT_TO_SERVER_HANDSHAKE_PACKET, ClientToServerHandshakePacket::class);
+		$this->registerPacket(Info::COMMAND_STEP_PACKET, CommandStepPacket::class);
+		$this->registerPacket(Info::CONTAINER_CLOSE_PACKET, ContainerClosePacket::class);
+		$this->registerPacket(Info::CONTAINER_OPEN_PACKET, ContainerOpenPacket::class);
+		$this->registerPacket(Info::CONTAINER_SET_CONTENT_PACKET, ContainerSetContentPacket::class);
+		$this->registerPacket(Info::CONTAINER_SET_DATA_PACKET, ContainerSetDataPacket::class);
+		$this->registerPacket(Info::CONTAINER_SET_SLOT_PACKET, ContainerSetSlotPacket::class);
+		$this->registerPacket(Info::CRAFTING_DATA_PACKET, CraftingDataPacket::class);
+		$this->registerPacket(Info::CRAFTING_EVENT_PACKET, CraftingEventPacket::class);
+		$this->registerPacket(Info::DISCONNECT_PACKET, DisconnectPacket::class);
+		$this->registerPacket(Info::DROP_ITEM_PACKET, DropItemPacket::class);
+		$this->registerPacket(Info::ENTITY_EVENT_PACKET, EntityEventPacket::class);
+		$this->registerPacket(Info::EXPLODE_PACKET, ExplodePacket::class);
+		$this->registerPacket(Info::FULL_CHUNK_DATA_PACKET, FullChunkDataPacket::class);
+		$this->registerPacket(Info::HURT_ARMOR_PACKET, HurtArmorPacket::class);
+		$this->registerPacket(Info::INTERACT_PACKET, InteractPacket::class);
+		$this->registerPacket(Info::INVENTORY_ACTION_PACKET, InventoryActionPacket::class);
+		$this->registerPacket(Info::ITEM_FRAME_DROP_ITEM_PACKET, ItemFrameDropItemPacket::class);
+		$this->registerPacket(Info::LEVEL_EVENT_PACKET, LevelEventPacket::class);
+		$this->registerPacket(Info::LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket::class);
+		$this->registerPacket(Info::LOGIN_PACKET, LoginPacket::class);
+		$this->registerPacket(Info::MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class);
+		$this->registerPacket(Info::MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class);
+		$this->registerPacket(Info::MOB_EQUIPMENT_PACKET, MobEquipmentPacket::class);
+		$this->registerPacket(Info::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
+		$this->registerPacket(Info::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
+		$this->registerPacket(Info::PLAYER_FALL_PACKET, PlayerFallPacket::class);
+		$this->registerPacket(Info::PLAYER_ACTION_PACKET, PlayerActionPacket::class);
+		$this->registerPacket(Info::PLAYER_INPUT_PACKET, PlayerInputPacket::class);
+		$this->registerPacket(Info::PLAYER_LIST_PACKET, PlayerListPacket::class);
+		$this->registerPacket(Info::PLAY_STATUS_PACKET, PlayStatusPacket::class);
+		$this->registerPacket(Info::REMOVE_BLOCK_PACKET, RemoveBlockPacket::class);
+		$this->registerPacket(Info::REMOVE_ENTITY_PACKET, RemoveEntityPacket::class);
+		$this->registerPacket(Info::REPLACE_ITEM_IN_SLOT_PACKET, ReplaceItemInSlotPacket::class);
+		$this->registerPacket(Info::REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket::class);
+		$this->registerPacket(Info::RESOURCE_PACK_CHUNK_REQUEST_PACKET, ResourcePackChunkRequestPacket::class);
+		$this->registerPacket(Info::RESOURCE_PACK_CHUNK_DATA_PACKET, ResourcePackChunkDataPacket::class);
+		$this->registerPacket(Info::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
+		$this->registerPacket(Info::RESOURCE_PACK_DATA_INFO_PACKET, ResourcePackDataInfoPacket::class);
+		$this->registerPacket(Info::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
+		$this->registerPacket(Info::RESOURCE_PACK_STACK_PACKET, ResourcePackStackPacket::class);
+		$this->registerPacket(Info::RESPAWN_PACKET, RespawnPacket::class);
+		$this->registerPacket(Info::RIDER_JUMP_PACKET, RiderJumpPacket::class);
+		$this->registerPacket(Info::SHOW_CREDITS_PACKET, ShowCreditsPacket::class);
+		$this->registerPacket(Info::SERVER_TO_CLIENT_HANDSHAKE_PACKET, ServerToClientHandshakePacket::class);
+		$this->registerPacket(Info::SET_COMMANDS_ENABLED_PACKET, SetCommandsEnabledPacket::class);
+		$this->registerPacket(Info::SET_DIFFICULTY_PACKET, SetDifficultyPacket::class);
+		$this->registerPacket(Info::SET_ENTITY_DATA_PACKET, SetEntityDataPacket::class);
+		$this->registerPacket(Info::SET_ENTITY_LINK_PACKET, SetEntityLinkPacket::class);
+		$this->registerPacket(Info::SET_ENTITY_MOTION_PACKET, SetEntityMotionPacket::class);
+		$this->registerPacket(Info::SET_HEALTH_PACKET, SetHealthPacket::class);
+		$this->registerPacket(Info::SET_PLAYER_GAME_TYPE_PACKET, SetPlayerGameTypePacket::class);
+		$this->registerPacket(Info::SET_SPAWN_POSITION_PACKET, SetSpawnPositionPacket::class);
+		$this->registerPacket(Info::SET_TIME_PACKET, SetTimePacket::class);
+		$this->registerPacket(Info::SPAWN_EXPERIENCE_ORB_PACKET, SpawnExperienceOrbPacket::class);
+		$this->registerPacket(Info::START_GAME_PACKET, StartGamePacket::class);
+		$this->registerPacket(Info::TAKE_ITEM_ENTITY_PACKET, TakeItemEntityPacket::class);
+		$this->registerPacket(Info::TEXT_PACKET, TextPacket::class);
+		$this->registerPacket(Info::TRANSFER_PACKET, TransferPacket::class);
+		$this->registerPacket(Info::UPDATE_BLOCK_PACKET, UpdateBlockPacket::class);
+		$this->registerPacket(Info::UPDATE_TRADE_PACKET, UpdateTradePacket::class);
+		$this->registerPacket(Info::USE_ITEM_PACKET, UseItemPacket::class);
+		$this->registerPacket(Info::BLOCK_PICK_REQUEST_PACKET, BlockPickRequestPacket::class);
+		$this->registerPacket(Info::COMMAND_BLOCK_UPDATE_PACKET, CommandBlockUpdatePacket::class);
+		$this->registerPacket(Info::PLAY_SOUND_PACKET, PlaySoundPacket::class);
+		$this->registerPacket(Info::SET_TITLE_PACKET, SetTitlePacket::class);
+		$this->registerPacket(Info::STOP_SOUND_PACKET, StopSoundPacket::class);
 
-		$this->registerPacket(ProtocolInfo::ADD_ENTITY_PACKET, AddEntityPacket::class);
-		$this->registerPacket(ProtocolInfo::ADD_HANGING_ENTITY_PACKET, AddHangingEntityPacket::class);
-		$this->registerPacket(ProtocolInfo::ADD_ITEM_ENTITY_PACKET, AddItemEntityPacket::class);
-		$this->registerPacket(ProtocolInfo::ADD_ITEM_PACKET, AddItemPacket::class);
-		$this->registerPacket(ProtocolInfo::ADD_PAINTING_PACKET, AddPaintingPacket::class);
-		$this->registerPacket(ProtocolInfo::ADD_PLAYER_PACKET, AddPlayerPacket::class);
-		$this->registerPacket(ProtocolInfo::ADVENTURE_SETTINGS_PACKET, AdventureSettingsPacket::class);
-		$this->registerPacket(ProtocolInfo::ANIMATE_PACKET, AnimatePacket::class);
-		$this->registerPacket(ProtocolInfo::AVAILABLE_COMMANDS_PACKET, AvailableCommandsPacket::class);
-		$this->registerPacket(ProtocolInfo::BATCH_PACKET, BatchPacket::class);
-		$this->registerPacket(ProtocolInfo::BLOCK_ENTITY_DATA_PACKET, BlockEntityDataPacket::class);
-		$this->registerPacket(ProtocolInfo::BLOCK_EVENT_PACKET, BlockEventPacket::class);
- 		$this->registerPacket(ProtocolInfo::BOSS_EVENT_PACKET, BossEventPacket::class);
-		$this->registerPacket(ProtocolInfo::CAMERA_PACKET, CameraPacket::class);
-		$this->registerPacket(ProtocolInfo::CHANGE_DIMENSION_PACKET, ChangeDimensionPacket::class);
-		$this->registerPacket(ProtocolInfo::CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket::class);
-		$this->registerPacket(ProtocolInfo::CLIENTBOUND_MAP_ITEM_DATA_PACKET, ClientboundMapItemDataPacket::class);
-		$this->registerPacket(ProtocolInfo::CLIENT_TO_SERVER_HANDSHAKE_PACKET, ClientToServerHandshakePacket::class);
-		$this->registerPacket(ProtocolInfo::COMMAND_STEP_PACKET, CommandStepPacket::class);
-		$this->registerPacket(ProtocolInfo::CONTAINER_CLOSE_PACKET, ContainerClosePacket::class);
-		$this->registerPacket(ProtocolInfo::CONTAINER_OPEN_PACKET, ContainerOpenPacket::class);
-		$this->registerPacket(ProtocolInfo::CONTAINER_SET_CONTENT_PACKET, ContainerSetContentPacket::class);
-		$this->registerPacket(ProtocolInfo::CONTAINER_SET_DATA_PACKET, ContainerSetDataPacket::class);
-		$this->registerPacket(ProtocolInfo::CONTAINER_SET_SLOT_PACKET, ContainerSetSlotPacket::class);
-		$this->registerPacket(ProtocolInfo::CRAFTING_DATA_PACKET, CraftingDataPacket::class);
-		$this->registerPacket(ProtocolInfo::CRAFTING_EVENT_PACKET, CraftingEventPacket::class);
-		$this->registerPacket(ProtocolInfo::DISCONNECT_PACKET, DisconnectPacket::class);
-		$this->registerPacket(ProtocolInfo::DROP_ITEM_PACKET, DropItemPacket::class);
-		$this->registerPacket(ProtocolInfo::ENTITY_EVENT_PACKET, EntityEventPacket::class);
-		$this->registerPacket(ProtocolInfo::EXPLODE_PACKET, ExplodePacket::class);
-		$this->registerPacket(ProtocolInfo::FULL_CHUNK_DATA_PACKET, FullChunkDataPacket::class);
-		$this->registerPacket(ProtocolInfo::HURT_ARMOR_PACKET, HurtArmorPacket::class);
-		$this->registerPacket(ProtocolInfo::INTERACT_PACKET, InteractPacket::class);
-		$this->registerPacket(ProtocolInfo::INVENTORY_ACTION_PACKET, InventoryActionPacket::class);
-		$this->registerPacket(ProtocolInfo::ITEM_FRAME_DROP_ITEM_PACKET, ItemFrameDropItemPacket::class);
-		$this->registerPacket(ProtocolInfo::LEVEL_EVENT_PACKET, LevelEventPacket::class);
-		$this->registerPacket(ProtocolInfo::LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket::class);
-		$this->registerPacket(ProtocolInfo::LOGIN_PACKET, LoginPacket::class);
-		$this->registerPacket(ProtocolInfo::MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class);
-		$this->registerPacket(ProtocolInfo::MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class);
-		$this->registerPacket(ProtocolInfo::MOB_EQUIPMENT_PACKET, MobEquipmentPacket::class);
-		$this->registerPacket(ProtocolInfo::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
-		$this->registerPacket(ProtocolInfo::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
-		$this->registerPacket(ProtocolInfo::PLAYER_FALL_PACKET, PlayerFallPacket::class);
-		$this->registerPacket(ProtocolInfo::PLAYER_ACTION_PACKET, PlayerActionPacket::class);
-		$this->registerPacket(ProtocolInfo::PLAYER_INPUT_PACKET, PlayerInputPacket::class);
-		$this->registerPacket(ProtocolInfo::PLAYER_LIST_PACKET, PlayerListPacket::class);
-		$this->registerPacket(ProtocolInfo::PLAY_STATUS_PACKET, PlayStatusPacket::class);
-		$this->registerPacket(ProtocolInfo::REMOVE_BLOCK_PACKET, RemoveBlockPacket::class);
-		$this->registerPacket(ProtocolInfo::REMOVE_ENTITY_PACKET, RemoveEntityPacket::class);
-		$this->registerPacket(ProtocolInfo::REPLACE_ITEM_IN_SLOT_PACKET, ReplaceItemInSlotPacket::class);
-		$this->registerPacket(ProtocolInfo::REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket::class);
-		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_CHUNK_REQUEST_PACKET, ResourcePackChunkRequestPacket::class);
-		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_CHUNK_DATA_PACKET, ResourcePackChunkDataPacket::class);
-		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
-		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_DATA_INFO_PACKET, ResourcePackDataInfoPacket::class);
-		$this->registerPacket(ProtocolInfo::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
-		$this->registerPacket(ProtocolInfo::RESOURCE_PACK_STACK_PACKET, ResourcePackStackPacket::class);
-		$this->registerPacket(ProtocolInfo::RESPAWN_PACKET, RespawnPacket::class);
-		$this->registerPacket(ProtocolInfo::RIDER_JUMP_PACKET, RiderJumpPacket::class);
-		$this->registerPacket(ProtocolInfo::SHOW_CREDITS_PACKET, ShowCreditsPacket::class);
-		$this->registerPacket(ProtocolInfo::SERVER_TO_CLIENT_HANDSHAKE_PACKET, ServerToClientHandshakePacket::class);
-		$this->registerPacket(ProtocolInfo::SET_COMMANDS_ENABLED_PACKET, SetCommandsEnabledPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_DIFFICULTY_PACKET, SetDifficultyPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_ENTITY_DATA_PACKET, SetEntityDataPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_ENTITY_LINK_PACKET, SetEntityLinkPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_ENTITY_MOTION_PACKET, SetEntityMotionPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_HEALTH_PACKET, SetHealthPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_PLAYER_GAME_TYPE_PACKET, SetPlayerGameTypePacket::class);
-		$this->registerPacket(ProtocolInfo::SET_SPAWN_POSITION_PACKET, SetSpawnPositionPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_TIME_PACKET, SetTimePacket::class);
-		$this->registerPacket(ProtocolInfo::SPAWN_EXPERIENCE_ORB_PACKET, SpawnExperienceOrbPacket::class);
-		$this->registerPacket(ProtocolInfo::START_GAME_PACKET, StartGamePacket::class);
-		$this->registerPacket(ProtocolInfo::TAKE_ITEM_ENTITY_PACKET, TakeItemEntityPacket::class);
-		$this->registerPacket(ProtocolInfo::TEXT_PACKET, TextPacket::class);
-		$this->registerPacket(ProtocolInfo::TRANSFER_PACKET, TransferPacket::class);
-		$this->registerPacket(ProtocolInfo::UPDATE_BLOCK_PACKET, UpdateBlockPacket::class);
-		$this->registerPacket(ProtocolInfo::UPDATE_TRADE_PACKET, UpdateTradePacket::class);
-		$this->registerPacket(ProtocolInfo::USE_ITEM_PACKET, UseItemPacket::class);
-		$this->registerPacket(ProtocolInfo::BLOCK_PICK_REQUEST_PACKET, BlockPickRequestPacket::class);
-		$this->registerPacket(ProtocolInfo::COMMAND_BLOCK_UPDATE_PACKET, CommandBlockUpdatePacket::class);
-		$this->registerPacket(ProtocolInfo::PLAY_SOUND_PACKET, PlaySoundPacket::class);
-		$this->registerPacket(ProtocolInfo::SET_TITLE_PACKET, SetTitlePacket::class);
-		$this->registerPacket(ProtocolInfo::STOP_SOUND_PACKET, StopSoundPacket::class);
+	    $this->registerPacket100(Info100::ADD_ENTITY_PACKET, AddEntityPacket::class);
+		$this->registerPacket100(Info100::ADD_HANGING_ENTITY_PACKET, AddHangingEntityPacket::class);
+		$this->registerPacket100(Info100::ADD_ITEM_ENTITY_PACKET, AddItemEntityPacket::class);
+		$this->registerPacket100(Info100::ADD_ITEM_PACKET, AddItemPacket::class);
+		$this->registerPacket100(Info100::ADD_PAINTING_PACKET, AddPaintingPacket::class);
+		$this->registerPacket100(Info100::ADD_PLAYER_PACKET, AddPlayerPacket::class);
+		$this->registerPacket100(Info100::ADVENTURE_SETTINGS_PACKET, AdventureSettingsPacket::class);
+		$this->registerPacket100(Info100::ANIMATE_PACKET, AnimatePacket::class);
+		$this->registerPacket100(Info100::AVAILABLE_COMMANDS_PACKET, AvailableCommandsPacket::class);
+		$this->registerPacket100(Info100::BATCH_PACKET, BatchPacket::class);
+		$this->registerPacket100(Info100::BLOCK_ENTITY_DATA_PACKET, BlockEntityDataPacket::class);
+		$this->registerPacket100(Info100::BLOCK_EVENT_PACKET, BlockEventPacket::class);
+ 		$this->registerPacket100(Info100::BOSS_EVENT_PACKET, BossEventPacket::class);
+		$this->registerPacket100(Info100::CAMERA_PACKET, CameraPacket::class);
+		$this->registerPacket100(Info100::CHANGE_DIMENSION_PACKET, ChangeDimensionPacket::class);
+		$this->registerPacket100(Info100::CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket::class);
+		$this->registerPacket100(Info100::CLIENTBOUND_MAP_ITEM_DATA_PACKET, ClientboundMapItemDataPacket::class);
+		$this->registerPacket100(Info100::CLIENT_TO_SERVER_HANDSHAKE_PACKET, ClientToServerHandshakePacket::class);
+		$this->registerPacket100(Info100::COMMAND_STEP_PACKET, CommandStepPacket::class);
+		$this->registerPacket100(Info100::CONTAINER_CLOSE_PACKET, ContainerClosePacket::class);
+		$this->registerPacket100(Info100::CONTAINER_OPEN_PACKET, ContainerOpenPacket::class);
+		$this->registerPacket100(Info100::CONTAINER_SET_CONTENT_PACKET, ContainerSetContentPacket::class);
+		$this->registerPacket100(Info100::CONTAINER_SET_DATA_PACKET, ContainerSetDataPacket::class);
+		$this->registerPacket100(Info100::CONTAINER_SET_SLOT_PACKET, ContainerSetSlotPacket::class);
+		$this->registerPacket100(Info100::CRAFTING_DATA_PACKET, CraftingDataPacket::class);
+		$this->registerPacket100(Info100::CRAFTING_EVENT_PACKET, CraftingEventPacket::class);
+		$this->registerPacket100(Info100::DISCONNECT_PACKET, DisconnectPacket::class);
+		$this->registerPacket100(Info100::DROP_ITEM_PACKET, DropItemPacket::class);
+		$this->registerPacket100(Info100::ENTITY_EVENT_PACKET, EntityEventPacket::class);
+		$this->registerPacket100(Info100::EXPLODE_PACKET, ExplodePacket::class);
+		$this->registerPacket100(Info100::FULL_CHUNK_DATA_PACKET, FullChunkDataPacket::class);
+		$this->registerPacket100(Info100::HURT_ARMOR_PACKET, HurtArmorPacket::class);
+		$this->registerPacket100(Info100::INTERACT_PACKET, InteractPacket::class);
+		$this->registerPacket100(Info100::INVENTORY_ACTION_PACKET, InventoryActionPacket::class);
+		$this->registerPacket100(Info100::ITEM_FRAME_DROP_ITEM_PACKET, ItemFrameDropItemPacket::class);
+		$this->registerPacket100(Info100::LEVEL_EVENT_PACKET, LevelEventPacket::class);
+		$this->registerPacket100(Info100::LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket::class);
+		$this->registerPacket100(Info100::LOGIN_PACKET, LoginPacket::class);
+		$this->registerPacket100(Info100::MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class);
+		$this->registerPacket100(Info100::MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class);
+		$this->registerPacket100(Info100::MOB_EQUIPMENT_PACKET, MobEquipmentPacket::class);
+		$this->registerPacket100(Info100::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
+		$this->registerPacket100(Info100::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
+		$this->registerPacket100(Info100::PLAYER_FALL_PACKET, PlayerFallPacket::class);
+		$this->registerPacket100(Info100::PLAYER_ACTION_PACKET, PlayerActionPacket::class);
+		$this->registerPacket100(Info100::PLAYER_INPUT_PACKET, PlayerInputPacket::class);
+		$this->registerPacket100(Info100::PLAYER_LIST_PACKET, PlayerListPacket::class);
+		$this->registerPacket100(Info100::PLAY_STATUS_PACKET, PlayStatusPacket::class);
+		$this->registerPacket100(Info100::REMOVE_BLOCK_PACKET, RemoveBlockPacket::class);
+		$this->registerPacket100(Info100::REMOVE_ENTITY_PACKET, RemoveEntityPacket::class);
+		$this->registerPacket100(Info100::REPLACE_ITEM_IN_SLOT_PACKET, ReplaceItemInSlotPacket::class);
+		$this->registerPacket100(Info100::REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket::class);
+		$this->registerPacket100(Info100::RESOURCE_PACK_CHUNK_REQUEST_PACKET, ResourcePackChunkRequestPacket::class);
+		$this->registerPacket100(Info100::RESOURCE_PACK_CHUNK_DATA_PACKET, ResourcePackChunkDataPacket::class);
+		$this->registerPacket100(Info100::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
+		$this->registerPacket100(Info100::RESOURCE_PACK_DATA_INFO_PACKET, ResourcePackDataInfoPacket::class);
+		$this->registerPacket100(Info100::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
+		$this->registerPacket100(Info100::RESOURCE_PACK_STACK_PACKET, ResourcePackStackPacket::class);
+		$this->registerPacket100(Info100::RESPAWN_PACKET, RespawnPacket::class);
+		$this->registerPacket100(Info100::RIDER_JUMP_PACKET, RiderJumpPacket::class);
+		$this->registerPacket100(Info100::SHOW_CREDITS_PACKET, ShowCreditsPacket::class);
+		$this->registerPacket100(Info100::SERVER_TO_CLIENT_HANDSHAKE_PACKET, ServerToClientHandshakePacket::class);
+		$this->registerPacket100(Info100::SET_COMMANDS_ENABLED_PACKET, SetCommandsEnabledPacket::class);
+		$this->registerPacket100(Info100::SET_DIFFICULTY_PACKET, SetDifficultyPacket::class);
+		$this->registerPacket100(Info100::SET_ENTITY_DATA_PACKET, SetEntityDataPacket::class);
+		$this->registerPacket100(Info100::SET_ENTITY_LINK_PACKET, SetEntityLinkPacket::class);
+		$this->registerPacket100(Info100::SET_ENTITY_MOTION_PACKET, SetEntityMotionPacket::class);
+		$this->registerPacket100(Info100::SET_HEALTH_PACKET, SetHealthPacket::class);
+		$this->registerPacket100(Info100::SET_PLAYER_GAME_TYPE_PACKET, SetPlayerGameTypePacket::class);
+		$this->registerPacket100(Info100::SET_SPAWN_POSITION_PACKET, SetSpawnPositionPacket::class);
+		$this->registerPacket100(Info100::SET_TIME_PACKET, SetTimePacket::class);
+		$this->registerPacket100(Info100::SPAWN_EXPERIENCE_ORB_PACKET, SpawnExperienceOrbPacket::class);
+		$this->registerPacket100(Info100::START_GAME_PACKET, StartGamePacket::class);
+		$this->registerPacket100(Info100::TAKE_ITEM_ENTITY_PACKET, TakeItemEntityPacket::class);
+		$this->registerPacket100(Info100::TEXT_PACKET, TextPacket::class);
+		$this->registerPacket100(Info100::TRANSFER_PACKET, TransferPacket::class);
+		$this->registerPacket100(Info100::UPDATE_BLOCK_PACKET, UpdateBlockPacket::class);
+		$this->registerPacket100(Info100::UPDATE_TRADE_PACKET, UpdateTradePacket::class);
+		$this->registerPacket100(Info100::USE_ITEM_PACKET, UseItemPacket::class);
 	}
 }

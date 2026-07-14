@@ -40,12 +40,12 @@ class PlayerListPacket extends DataPacket{
 		return parent::clean();
 	}
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putByte($this->type);
 		$this->putUnsignedVarInt(count($this->entries));
 		foreach($this->entries as $d){

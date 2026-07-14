@@ -27,7 +27,7 @@ use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\utils\BinaryStream;
 use pocketmine\utils\Utils;
-
+use pocketmine\Server;
 
 abstract class DataPacket extends BinaryStream{
 
@@ -39,12 +39,13 @@ abstract class DataPacket extends BinaryStream{
 		return $this::NETWORK_ID;
 	}
 
-	abstract public function encode();
+	abstract public function encode($protocol);
 
-	abstract public function decode();
+	abstract public function decode($protocol);
 
-	public function reset(){
-		$this->buffer = chr($this::NETWORK_ID);
+	public function reset($protocol = 0){
+	    $pid = Server::getInstance()->getNetwork()->getPacketId(get_class($this), $protocol);
+		$this->buffer = chr($pid ?? $this::NETWORK_ID);
 		$this->offset = 0;
 	}
 

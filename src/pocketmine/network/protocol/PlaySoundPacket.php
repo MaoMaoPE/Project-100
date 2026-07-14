@@ -44,15 +44,15 @@ class PlaySoundPacket extends DataPacket{
 	public $unknown1;
 	public $unknown2;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->unknown = $this->getString();
 		$this->getBlockCoords($this->x, $this->y, $this->z); //Not sure if it's BlockCoords
 		$this->unknown1 = $this->getFloat();
 		$this->unknown2 = $this->getFloat();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putString($this->unknown);
 		$this->putBlockCoords($this->x, $this->y, $this->z); //Not sure if it's BlockCoords
 		$this->putFloat($this->unknown1);

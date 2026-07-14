@@ -36,12 +36,12 @@ class ResourcePacksInfoPacket extends DataPacket{
 	/** @var ResourcePackInfoEntry */
 	public $resourcePackEntries = [];
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 
 		$this->putBool($this->mustAccept);
 		$this->putLShort(count($this->behaviorPackEntries));

@@ -522,7 +522,7 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function addSound(Sound $sound, array $players = null){
-		$pk = $sound->encode();
+		$pk = $sound->encode(107);
 
 		if($players === null){
 			if($pk !== null){
@@ -546,7 +546,7 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function addParticle(Particle $particle, array $players = null){
-		$pk = $particle->encode();
+		$pk = $particle->encode(107);
 
 		if($players === null){
 			if($pk !== null){
@@ -3076,11 +3076,11 @@ class Level implements ChunkManager, Metadatable{
 		$pk->chunkX = $chunkX;
 		$pk->chunkZ = $chunkZ;
 		$pk->data = $payload;
-		$pk->encode();
+		$pk->encode(107);
 
 		$batch = new BatchPacket();
 		$batch->payload = zlib_encode(Binary::writeUnsignedVarInt(strlen($pk->getBuffer())) . $pk->getBuffer(), ZLIB_ENCODING_DEFLATE, Server::getInstance()->networkCompressionLevel);
-		$batch->encode();
+		$batch->encode(107);
 		$batch->isEncoded = true;
 		return $batch;
 	}

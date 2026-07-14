@@ -33,12 +33,12 @@ class UpdateAttributesPacket extends DataPacket{
 	/** @var Attribute[] */
 	public $entries = [];
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->entityId);
 		$this->putUnsignedVarInt(count($this->entries));
 		foreach($this->entries as $entry){

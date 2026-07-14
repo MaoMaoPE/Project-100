@@ -29,12 +29,12 @@ class BatchPacket extends DataPacket{
 
 	public $payload;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->payload = $this->getString();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putString($this->payload);
 	}
 

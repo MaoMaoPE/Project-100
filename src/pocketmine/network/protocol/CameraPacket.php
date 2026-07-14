@@ -30,11 +30,11 @@ class CameraPacket extends DataPacket{
 	const NETWORK_ID = Info::CAMERA_PACKET;
 	public $eid;
 	
-	public function decode(){
+	public function decode($protocol){
 	}
 	
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putVarInt($this->eid);
 		$this->putVarInt($this->eid);
 	}

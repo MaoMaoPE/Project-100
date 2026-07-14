@@ -29,12 +29,12 @@ class ContainerClosePacket extends DataPacket{
 
 	public $windowid;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->windowid = $this->getByte();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putByte($this->windowid);
 	}
 

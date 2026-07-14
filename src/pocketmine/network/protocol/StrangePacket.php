@@ -39,12 +39,12 @@ class StrangePacket extends DataPacket{
 		}
 	}
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putAddress($this->address, $this->port);
 	}
 

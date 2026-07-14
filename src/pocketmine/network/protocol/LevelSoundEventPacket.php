@@ -132,7 +132,7 @@ class LevelSoundEventPacket extends DataPacket{
 	public $unknownBool = false;
 	public $unknownBool2 = false;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->sound = $this->getByte();
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->extraData = $this->getVarInt();
@@ -141,8 +141,8 @@ class LevelSoundEventPacket extends DataPacket{
 		$this->unknownBool2 = $this->getBool();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putByte($this->sound);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putVarInt($this->extraData);

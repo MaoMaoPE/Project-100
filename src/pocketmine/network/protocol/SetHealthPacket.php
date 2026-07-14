@@ -29,12 +29,12 @@ class SetHealthPacket extends DataPacket{
 
 	public $health;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->health = $this->getVarInt();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putVarInt($this->health);
 	}
 

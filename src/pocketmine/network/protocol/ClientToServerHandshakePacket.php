@@ -31,12 +31,12 @@ class ClientToServerHandshakePacket extends DataPacket{
 		return true;
 	}
 
-	public function decode(){
+	public function decode($protocol){
 		//No payload
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		//No payload
 	}
 }

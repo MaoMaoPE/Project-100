@@ -24,7 +24,6 @@ namespace pocketmine\network;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\Info;
-use pocketmine\network\protocol\Info as ProtocolInfo;
 use pocketmine\Player;
 use pocketmine\Server;
 use raklib\protocol\EncapsulatedPacket;
@@ -133,11 +132,13 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 		if(isset($this->players[$identifier])){
 			try{
 				if($packet->buffer !== ""){
-					$pk = $this->getPacket($packet->buffer);
+				    $player = $this->players[$identifier];
+				    $protocol = $player->getProtocol() ?? Info::CURRENT_PROTOCOL;
+					$pk = $this->getPacket($packet->buffer, $protocol);
 					if($pk !== null){
-						$pk->decode();
+						$pk->decode($protocol);
 						assert($pk->feof(), "Still " . strlen(substr($pk->buffer, $pk->offset)) . " bytes unread!");
-						$this->players[$identifier]->handleDataPacket($pk);
+						$player->handleDataPacket($pk);
 					}
 				}
 			}catch(\Throwable $e){
@@ -210,7 +211,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 			$identifier = $this->identifiers[$h];
 			$pk = null;
 			if(!$packet->isEncoded){
-				$packet->encode();
+				$packet->encode($player->getProtocol() ?? Info::CURRENT_PROTOCOL);
 				$packet->isEncoded = true;
 			}elseif(!$needACK){
 				if(!isset($packet->__encapsulatedPacket)){
@@ -223,7 +224,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 				$pk = $packet->__encapsulatedPacket;
 			}
 
-			if(!$immediate and !$needACK and $packet::NETWORK_ID !== ProtocolInfo::BATCH_PACKET
+			if(!$immediate and !$needACK and $packet::NETWORK_ID !== Info::BATCH_PACKET
 				and Network::$BATCH_THRESHOLD >= 0
 				and strlen($packet->buffer) >= Network::$BATCH_THRESHOLD){
 				$this->server->batchPackets([$player], [$packet], true);
@@ -249,14 +250,14 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 		return null;
 	}
 
-	private function getPacket($buffer){
+	private function getPacket($buffer, $protocol){
 		$pid = ord($buffer[0]);
 		$start = 1;
 		if($pid == 0xfe){
 			$pid = ord($buffer[1]);
 			$start++;
 		}
-		if(($data = $this->network->getPacket($pid)) === null){
+		if(($data = $this->network->getPacket($pid, $protocol)) === null){
 			return null;
 		}
 		$data->setBuffer($buffer, $start);

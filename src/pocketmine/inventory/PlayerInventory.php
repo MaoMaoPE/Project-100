@@ -402,7 +402,7 @@ class PlayerInventory extends BaseInventory{
 		return $armor;
 	}
 
-	public function clearAll(){
+	public function clearAll($send = true){
 		$limit = $this->getSize() + 4;
 		for($index = 0; $index < $limit; ++$index){
 			$this->clear($index, false);
@@ -424,7 +424,7 @@ class PlayerInventory extends BaseInventory{
 		$pk = new MobArmorEquipmentPacket();
 		$pk->eid = $this->getHolder()->getId();
 		$pk->slots = $armor;
-		$pk->encode();
+		$pk->encode(107);
 		$pk->isEncoded = true;
 
 		foreach($target as $player){
@@ -471,7 +471,7 @@ class PlayerInventory extends BaseInventory{
 		$pk = new MobArmorEquipmentPacket();
 		$pk->eid = $this->getHolder()->getId();
 		$pk->slots = $armor;
-		$pk->encode();
+		$pk->encode(107);
 		$pk->isEncoded = true;
 
 		foreach($target as $player){

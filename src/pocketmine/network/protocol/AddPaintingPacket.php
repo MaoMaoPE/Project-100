@@ -34,12 +34,12 @@ class AddPaintingPacket extends DataPacket{
 	public $direction;
 	public $title;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->eid); //EntityUniqueID
 		$this->putEntityId($this->eid); //EntityRuntimeID
 		$this->putBlockCoords($this->x, $this->y, $this->z);

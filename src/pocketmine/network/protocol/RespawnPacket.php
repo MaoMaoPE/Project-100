@@ -31,14 +31,14 @@ class RespawnPacket extends DataPacket{
 	public $y;
 	public $z;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->x = $this->getLFloat();
 		$this->y = $this->getLFloat();
 		$this->z = $this->getLFloat();
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putLFloat($this->x);
 		$this->putLFloat($this->y);
 		$this->putLFloat($this->z);

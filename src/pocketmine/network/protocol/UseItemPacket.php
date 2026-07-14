@@ -41,7 +41,7 @@ class UseItemPacket extends DataPacket{
 	public $posZ;
 	public $slot;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->getBlockCoords($this->x, $this->y, $this->z);
 		$this->blockId = $this->getUnsignedVarInt();
 		$this->face = $this->getVarInt();
@@ -51,7 +51,7 @@ class UseItemPacket extends DataPacket{
 		$this->item = $this->getSlot();
 	}
 
-	public function encode(){
+	public function encode($protocol){
 
 	}
 }

@@ -31,11 +31,11 @@ class InventoryActionPacket extends DataPacket{
 	public $varint1;
 	public $varint2;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
+	public function encode($protocol){
 		$this->putUnsignedVarInt($this->uvarint0);
 		$this->putSlot($this->item);
 		$this->putVarInt($this->varint1);

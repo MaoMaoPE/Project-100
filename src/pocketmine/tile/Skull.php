@@ -47,7 +47,7 @@ class Skull extends Spawnable{
 	}
 
 	public function setType(int $type){
-		if($type >= 0 && $type <= 4){
+		if($type >= 0 && $type <= 5){
 			$this->namedtag->SkullType = new ByteTag("SkullType", $type);
 			$this->onChanged();
 			return true;
@@ -65,6 +65,7 @@ class Skull extends Spawnable{
 	}
 
 	public function getSpawnCompound(){
+	    $this->namedtag->SkullType = new StringTag("SkullType", max(0, min($this->namedtag->SkullType->getValue(), 5)));
 		return new CompoundTag("", [
 			new StringTag("id", Tile::SKULL),
 			$this->namedtag->SkullType,

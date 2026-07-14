@@ -29,12 +29,12 @@ class AddItemPacket extends DataPacket{
 
 	public $item;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putSlot($this->item);
 	}
 

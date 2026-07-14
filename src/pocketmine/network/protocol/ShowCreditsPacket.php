@@ -30,12 +30,12 @@ class ShowCreditsPacket extends DataPacket{
 	public $eid;
 	public $type;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->eid);
 		$this->putVarInt($this->type);
 	}

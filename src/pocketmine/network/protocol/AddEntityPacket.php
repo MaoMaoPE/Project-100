@@ -43,12 +43,12 @@ class AddEntityPacket extends DataPacket{
 	public $metadata = [];
 	public $links = [];
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->eid); //EntityUniqueID - TODO: verify this
 		$this->putEntityId($this->eid);
 		$this->putUnsignedVarInt($this->type);

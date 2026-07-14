@@ -35,7 +35,7 @@ class MoveEntityPacket extends DataPacket{
 	public $headYaw;
 	public $pitch;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->eid = $this->getEntityId();
 		$this->getVector3f($this->x, $this->y, $this->z);
 		$this->pitch = $this->getByte() * (360.0 / 256);
@@ -43,8 +43,8 @@ class MoveEntityPacket extends DataPacket{
 		$this->headYaw = $this->getByte() * (360.0 / 256);
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->eid);
 		$this->putVector3f($this->x, $this->y, $this->z);
 		$this->putByte($this->pitch / (360.0 / 256));

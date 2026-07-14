@@ -29,12 +29,12 @@ class AvailableCommandsPacket extends DataPacket{
 	public $commands; //JSON-encoded command data
 	public $unknown;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putString($this->commands);
 		$this->putString($this->unknown);
 	}

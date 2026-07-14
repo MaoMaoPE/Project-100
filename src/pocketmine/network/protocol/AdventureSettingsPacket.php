@@ -61,7 +61,7 @@ class AdventureSettingsPacket extends DataPacket{
 	public $flags = 0;
 	public $userPermission;
 
-	public function decode(){
+	public function decode($protocol){
 		$this->flags = $this->getUnsignedVarInt();
 		$this->userPermission = $this->getUnsignedVarInt();
 
@@ -77,8 +77,8 @@ class AdventureSettingsPacket extends DataPacket{
 		$this->isFlying       = (bool) ($this->flags & (1 << 9));
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 
 		$this->flags |= ((int) $this->worldImmutable);
 		$this->flags |= ((int) $this->noPvp)        << 1;

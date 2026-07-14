@@ -40,7 +40,7 @@ class TextPacket extends DataPacket{
 	public $message;
 	public $parameters = [];
 
-	public function decode(){
+	public function decode($protocol){
 		$this->type = $this->getByte();
 		switch($this->type){
 			case self::TYPE_POPUP:
@@ -63,8 +63,8 @@ class TextPacket extends DataPacket{
 		}
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putByte($this->type);
 		switch($this->type){
 			case self::TYPE_POPUP:

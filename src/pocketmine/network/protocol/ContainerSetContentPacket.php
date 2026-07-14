@@ -42,7 +42,7 @@ class ContainerSetContentPacket extends DataPacket{
 		return parent::clean();
 	}
 
-	public function decode(){
+	public function decode($protocol){
 		$this->windowid = $this->getByte();
 		$count = $this->getUnsignedVarInt();
 		for($s = 0; $s < $count and !$this->feof(); ++$s){
@@ -56,8 +56,8 @@ class ContainerSetContentPacket extends DataPacket{
 		}
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putByte($this->windowid);
 		$this->putUnsignedVarInt(count($this->slots));
 		foreach($this->slots as $slot){

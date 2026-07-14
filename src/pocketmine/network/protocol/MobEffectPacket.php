@@ -38,12 +38,12 @@ class MobEffectPacket extends DataPacket{
 	public $particles = true;
 	public $duration;
 
-	public function decode(){
+	public function decode($protocol){
 
 	}
 
-	public function encode(){
-		$this->reset();
+	public function encode($protocol){
+		$this->reset($protocol);
 		$this->putEntityId($this->eid);
 		$this->putByte($this->eventId);
 		$this->putVarInt($this->effectId);
