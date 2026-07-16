@@ -232,6 +232,7 @@ interface BlockIds{
 	const END_STONE_BRICKS = 206;
 	const FROSTED_ICE = 207;
 	const END_ROD = 208;
+	const END_GATEWAY = 209;
 
 	const SHULKER_BOX = 218;
 	const PURPLE_GLAZED_TERRACOTTA = 219;

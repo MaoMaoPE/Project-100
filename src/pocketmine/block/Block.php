@@ -296,6 +296,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::DRAGON_EGG] = DragonEgg::class;
 			self::$list[self::COMMAND_BLOCK] = CommandBlock::class;
 			self::$list[self::END_PORTAL] = EndPortal::class;
+			self::$list[self::END_GATEWAY] = EndGateway::class;
 
 			foreach(self::$list as $id => $class){
 				if($class !== null){
