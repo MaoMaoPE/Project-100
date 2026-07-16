@@ -27,6 +27,7 @@ use pocketmine\event\entity\EntityInventoryChangeEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\ListTag;
+use pocketmine\network\protocol\Info;
 use pocketmine\network\protocol\ContainerSetContentPacket;
 use pocketmine\network\protocol\ContainerSetSlotPacket;
 use pocketmine\network\protocol\MobArmorEquipmentPacket;
@@ -424,7 +425,7 @@ class PlayerInventory extends BaseInventory{
 		$pk = new MobArmorEquipmentPacket();
 		$pk->eid = $this->getHolder()->getId();
 		$pk->slots = $armor;
-		$pk->encode(107);
+		$pk->encode(Info::CURRENT_PROTOCOL);
 		$pk->isEncoded = true;
 
 		foreach($target as $player){
@@ -471,7 +472,7 @@ class PlayerInventory extends BaseInventory{
 		$pk = new MobArmorEquipmentPacket();
 		$pk->eid = $this->getHolder()->getId();
 		$pk->slots = $armor;
-		$pk->encode(107);
+		$pk->encode(Info::CURRENT_PROTOCOL);
 		$pk->isEncoded = true;
 
 		foreach($target as $player){

@@ -82,6 +82,7 @@ use pocketmine\network\Network;
 use pocketmine\network\protocol\BatchPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
+use pocketmine\network\protocol\Info100;
 use pocketmine\network\protocol\PlayerListPacket;
 use pocketmine\network\query\QueryHandler;
 use pocketmine\network\RakLibInterface;
@@ -2506,7 +2507,13 @@ class Server{
 		}
 
 		$this->sendFullPlayerListData($player);
-		$player->dataPacket($this->craftingManager->getCraftingDataPacket());
+		$protocol = $player->getProtocol();
+		if (in_array($protocol, Info100::ACCEPTED_PROTOCOLS)) {
+		    $protocol = Info100::CURRENT_PROTOCOL;
+		} else {
+		    $protocol = ProtocolInfo::CURRENT_PROTOCOL;
+		}
+		$player->dataPacket($this->craftingManager->getCraftingDataPacket($protocol));
 	}
 
 	public function addPlayer($identifier, Player $player){

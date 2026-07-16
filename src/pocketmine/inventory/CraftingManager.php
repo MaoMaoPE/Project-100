@@ -23,6 +23,8 @@ use pocketmine\event\Timings;
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
 use pocketmine\network\protocol\CraftingDataPacket;
+use pocketmine\network\protocol\Info;
+use pocketmine\network\protocol\Info100;
 use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\MainLogger;
@@ -43,8 +45,8 @@ class CraftingManager{
 
 	private static $RECIPE_COUNT = 0;
 
-	/** @var CraftingDataPacket */
-	private $craftingDataCache;
+	/** @var CraftingDataPacket[] */
+	private $craftingDataCache = [];
 
 	public function __construct(){
 		$this->registerBrewingStand();
@@ -89,13 +91,16 @@ class CraftingManager{
 			}
 		}
 
-		$this->buildCraftingDataCache();
+		$this->buildCraftingDataCache(Info::CURRENT_PROTOCOL);
+		$this->buildCraftingDataCache(Info100::CURRENT_PROTOCOL);
 	}
 
 	/**
 	 * Rebuilds the cached CraftingDataPacket.
+	 *
+	 * @param int $protocol
 	 */
-	public function buildCraftingDataCache(){
+	public function buildCraftingDataCache($protocol){
 		Timings::$craftingDataCacheRebuildTimer->startTiming();
 		$pk = new CraftingDataPacket();
 		$pk->cleanRecipes = true;
@@ -112,24 +117,26 @@ class CraftingManager{
 			$pk->addFurnaceRecipe($recipe);
 		}
 
-		$pk->encode(107);
+		$pk->encode($protocol);
 		$pk->isEncoded = true;
 
-		$this->craftingDataCache = $pk;
+		$this->craftingDataCache[$protocol] = $pk;
 		Timings::$craftingDataCacheRebuildTimer->stopTiming();
 	}
 
 	/**
 	 * Returns a CraftingDataPacket for sending to players. Rebuilds the cache if it is outdated.
 	 *
+	 * @param int $protocol
+	 *
 	 * @return CraftingDataPacket
 	 */
-	public function getCraftingDataPacket() : CraftingDataPacket{
-		if($this->craftingDataCache === null){
-			$this->buildCraftingDataCache();
+	public function getCraftingDataPacket($protocol) : CraftingDataPacket{
+		if($this->craftingDataCache[$protocol] === null){
+			$this->buildCraftingDataCache($protocol);
 		}
 
-		return $this->craftingDataCache;
+		return $this->craftingDataCache[$protocol];
 	}
 
 	protected function registerBrewingStand(){

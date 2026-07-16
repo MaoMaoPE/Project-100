@@ -88,6 +88,7 @@ use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\LongTag;
+use pocketmine\network\protocol\Info;
 use pocketmine\network\protocol\BatchPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
@@ -522,7 +523,7 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function addSound(Sound $sound, array $players = null){
-		$pk = $sound->encode(107);
+		$pk = $sound->encode(Info::CURRENT_PROTOCOL);
 
 		if($players === null){
 			if($pk !== null){
@@ -546,7 +547,7 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function addParticle(Particle $particle, array $players = null){
-		$pk = $particle->encode(107);
+		$pk = $particle->encode(Info::CURRENT_PROTOCOL);
 
 		if($players === null){
 			if($pk !== null){
@@ -2550,7 +2551,7 @@ class Level implements ChunkManager, Metadatable{
 			foreach($this->chunkSendQueue[$index] as $player){
 				/** @var Player $player */
 				if($player->isConnected() and isset($player->usedChunks[$index])){
-					$player->sendChunk($x, $z, $this->chunkCache[$index]);
+					$player->sendChunk($x, $z, Level::getChunkCacheFromData($x, $z, $this->chunkCache[$index], $player->getProtocol() ?? Info::CURRENT_PROTOCOL));
 				}
 			}
 			unset($this->chunkSendQueue[$index]);
@@ -2592,7 +2593,7 @@ class Level implements ChunkManager, Metadatable{
 		$index = Level::chunkHash($x, $z);
 
 		if(!isset($this->chunkCache[$index]) and $this->cacheChunks and $this->server->getMemoryManager()->canUseChunkCache()){
-			$this->chunkCache[$index] = Level::getChunkCacheFromData($x, $z, $payload);
+			$this->chunkCache[$index] = $payload;
 			$this->sendChunkFromCache($x, $z);
 			$this->timings->syncChunkSendTimer->stopTiming();
 			return;
@@ -3072,19 +3073,20 @@ class Level implements ChunkManager, Metadatable{
 	 * @param int    $chunkX
 	 * @param int    $chunkZ
 	 * @param string $payload
+	 * @param int    $protocol
 	 *
 	 * @return DataPacket
 	 */
-	public static function getChunkCacheFromData($chunkX, $chunkZ, $payload){
+	public static function getChunkCacheFromData($chunkX, $chunkZ, $payload, $protocol){
 		$pk = new FullChunkDataPacket();
 		$pk->chunkX = $chunkX;
 		$pk->chunkZ = $chunkZ;
 		$pk->data = $payload;
-		$pk->encode(107);
+		$pk->encode($protocol);
 
 		$batch = new BatchPacket();
 		$batch->payload = zlib_encode(Binary::writeUnsignedVarInt(strlen($pk->getBuffer())) . $pk->getBuffer(), ZLIB_ENCODING_DEFLATE, Server::getInstance()->networkCompressionLevel);
-		$batch->encode(107);
+		$batch->encode($protocol);
 		$batch->isEncoded = true;
 		return $batch;
 	}
