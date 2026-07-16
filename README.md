@@ -14,13 +14,15 @@ Project 100 (GenisysGT)
 -------------
 **请遵守 GNU GPLv3 许可协议条款，在重新分发此软件时，向软件接收者提供此软件的源代码，否则将构成侵权行为！**
 
-  	这是一个自由软件。您可以根据自由软件基金会出版的 GNU 通用公共
-  	许可证第 3 版的许可条款重新分发并/或修改此软件，或自由选择使用
-  	任何更新的版本。
+  	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-  	分发此软件的目的是希望它能够有用，但此软件不提供任何保证，包括
-  	任何默认的适销性和对某特定用途的适用性。有关详情，请参考 GNU
-  	通用公共许可证条款。
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-  	您应该已经随此软件收到一份 GNU 通用公共许可证的副本。如果没有，
-  	请访问 <http://www.gnu.org/licenses/>。
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
