@@ -31,7 +31,7 @@ interface Info{
 	 * Actual Minecraft: PE protocol version
 	 */
 	const CURRENT_PROTOCOL = 107;
-	const ACCEPTED_PROTOCOLS = [100,101,102,105,106,107,/*113*/]; // 1.0.0 -> 1.1.0 的Protocol, 1.1.0的协议等待适配
+	const ACCEPTED_PROTOCOLS = [100,101,102,105,106,107/*,113*/]; // 1.0.0 -> 1.1.0 的Protocol, 1.1.0的协议等待适配
 	/**
 	 * @doc
 	 * by XinYue Neko(NewmoomCat)
@@ -44,7 +44,7 @@ interface Info{
 	 * 1.1.0 至 1.1.7 -> 113
 	 * 以上协议均对应正式版版本号
 	 */
-	const MINECRAFT_VERSION = ["1.0.0","1.0.3","v1.0.4","v1.0.5","v1.0.6","v1.0.7",/*"1.1.0"*/];
+	const MINECRAFT_VERSION = ["v1.0.0","v1.0.3","v1.0.4","v1.0.5","v1.0.6","v1.0.7"/*,"1.1.0"*/];
 	const MINECRAFT_VERSION_NETWORK = "1.0.0";
 
 	const LOGIN_PACKET = 0x01;
