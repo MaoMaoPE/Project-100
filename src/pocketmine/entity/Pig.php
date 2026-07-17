@@ -39,6 +39,11 @@ class Pig extends Animal{
 	public function getName() : string{
 		return "Pig";
 	}
+
+	protected function initEntity() {
+		$this->setMaxHealth(10);
+		return parent::initEntity();
+	}
 	
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();

@@ -42,6 +42,11 @@ class Sheep extends Animal implements Colorable{
 		return "Sheep";
 	}
 
+	protected function initEntity() {
+		$this->setMaxHealth(8);
+		return parent::initEntity();
+	}
+
 	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->Color)){
 			$nbt->Color = new ByteTag("Color", self::getRandomColor());

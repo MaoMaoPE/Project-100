@@ -21,6 +21,9 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -35,6 +38,11 @@ class CaveSpider extends Monster{
 
 	public function getName() : string{
 		return "Cave Spider";
+	}
+
+	protected function initEntity() {
+		$this->setMaxHealth(16);
+		return parent::initEntity();
 	}
 	
 	public function spawnTo(Player $player){
@@ -53,5 +61,21 @@ class CaveSpider extends Monster{
 		$player->dataPacket($pk);
 
 		parent::spawnTo($player);
+	}
+
+	public function getDrops(){
+		$cause = $this->lastDamageCause;
+		if($cause instanceof EntityDamageByEntityEvent){
+			$damager = $cause->getDamager();
+			if($damager instanceof Player){
+				$lootingL = $damager->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+				$drops = [ItemItem::get(ItemItem::STRING, 0, mt_rand(0, 2 + $lootingL))];
+				$drops[] = ItemItem::get(ItemItem::SPIDER_EYE, 0, mt_rand(0, 2 + $lootingL));
+
+				return $drops;
+			}
+		}
+
+		return [];
 	}
 }

@@ -39,6 +39,11 @@ class Spider extends Monster{
 		return "Spider";
 	}
 
+	protected function initEntity() {
+		$this->setMaxHealth(16);
+		return parent::initEntity();
+	}
+
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
