@@ -25,7 +25,7 @@ namespace pocketmine\entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\CreeperPowerEvent;
 use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\Item;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -105,7 +105,7 @@ class Creeper extends Monster{
 			$damager = $cause->getDamager();
 			if ($damager instanceof Player){
 				$lootingL = $damager->getItemInHand()->getEnchantment(Enchantment::TYPE_WEAPON_LOOTING);
-				$drops = [Item::get(Item::GUNPOWDER, 0, mt_rand(0, 2 + $lootingL))];
+				$drops = [ItemItem::get(ItemItem::GUNPOWDER, 0, mt_rand(0, 2 + $lootingL))];
 
 				return $drops;
 			}

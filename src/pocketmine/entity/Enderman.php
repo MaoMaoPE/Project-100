@@ -23,7 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\enchantment\Enchantment;
-use pocketmine\item\Item;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -38,6 +38,11 @@ class Enderman extends Monster{
 	
 	public function getName() : string{
 		return "Enderman";
+	}
+
+	public function initEntity(){
+		$this->setMaxHealth(40);
+		parent::initEntity();
 	}
 	
 	public function spawnTo(Player $player){
@@ -70,7 +75,7 @@ class Enderman extends Monster{
 			$damager = $cause->getDamager();
 			if ($damager instanceof Player){
 				$lootingL = $damager->getItemInHand()->getEnchantment(Enchantment::TYPE_WEAPON_LOOTING);
-				$drops = [Item::get(Item::ENDER_PEARL, 0, mt_rand(0, 2 + $lootingL))];
+				$drops = [ItemItem::get(ItemItem::ENDER_PEARL, 0, mt_rand(0, 2 + $lootingL))];
 
 				return $drops;
 			}

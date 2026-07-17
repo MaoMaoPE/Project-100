@@ -32,7 +32,7 @@ class SnowGolem extends Animal{
 	public $height = 1.8;
 	
 	public function initEntity(){
-		$this->setMaxHealth(4);
+		$this->setMaxHealth(5);
 		parent::initEntity();
 	}
 	

@@ -27,6 +27,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\Player;
+use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\MobArmorEquipmentPacket;
 
