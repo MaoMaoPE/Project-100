@@ -31,7 +31,7 @@ class Spider extends Monster{
 	const NETWORK_ID = 35;
 	public $width = 0.3;
 	public $length = 0.9;
-	public $height = 1.9;
+	public $height = 0.9;
 
 	public $dropExp = [5, 5];
 	
