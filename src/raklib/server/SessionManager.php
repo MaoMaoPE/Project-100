@@ -214,6 +214,13 @@ class SessionManager{
 		$this->server->pushThreadToMainPacket($buffer);
 	}
 
+	protected function streamPing(Session $session){
+		$identifier = $session->getAddress() .":". $session->getPort();
+		$ping = $session->getPing();
+		$buffer = chr(RakLib::PACKET_PING) . chr(strlen($identifier)) . $identifier . chr(strlen($ping)) . $ping;
+		$this->server->pushThreadToMainPacket($buffer);
+	}
+
 	protected function streamClose($identifier, $reason){
 		$buffer = chr(RakLib::PACKET_CLOSE_SESSION) . chr(strlen($identifier)) . $identifier . chr(strlen($reason)) . $reason;
 		$this->server->pushThreadToMainPacket($buffer);

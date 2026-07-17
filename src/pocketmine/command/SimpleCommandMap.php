@@ -88,6 +88,8 @@ use pocketmine\command\defaults\ExtractPharCommand;
 use pocketmine\command\defaults\MakePluginCommand;
 use pocketmine\command\defaults\LoadPluginCommand;
 
+use pocketmine\command\defaults\PingCommand;
+
 class SimpleCommandMap implements CommandMap{
 
 	/**
@@ -171,6 +173,8 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new ReloadCommand("reload"), null, true);
 		$this->register("pocketmine", new XpCommand("xp"));
 		$this->register("pocketmine", new SetBlockCommand("setblock"));
+
+		$this->register("OBS", new PingCommand("Ping"));
 
 		if($this->server->getProperty("debug.commands", false)){
 			$this->register("pocketmine", new StatusCommand("status"), null, true);
