@@ -29,6 +29,10 @@ use pocketmine\Player;
 class WitherSkeleton extends Monster implements ProjectileSource {
     const NETWORK_ID = 48;
 
+    public $width = 0.6;
+	public $length = 0.6;
+	public $height = 1.97;
+
     public $dropExp = [5, 5];
 
     public function getName() : string{
