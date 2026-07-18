@@ -94,7 +94,7 @@ class EndPortalFrame extends Solid implements SolidLight{
 		}elseif($item->getId() !== Item::EYE_OF_ENDER && ($this->getDamage() & 0x04) === 4){
 			$this->setDamage($this->getDamage() & 0x04 - 4);
 			$this->eye = false;
-			$this->getLevel()->dropItem($this->add(0.5, 0.75, 0.5), Item::get(Item::EYE_OF_ENDER));
+			$this->getLevel()->dropItem($this->add(0.5, 0.75, 0.5), Item::get(Item::EYE_OF_ENDER)); //应该是这个函数有点问题 
 			$this->tryDestroyingPortal($this);
 		}
 		return false;
