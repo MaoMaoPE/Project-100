@@ -97,7 +97,7 @@ class EndPortalFrame extends Solid implements SolidLight{
 			$this->getLevel()->dropItem($this->add(0.5, 0.75, 0.5), Item::get(Item::EYE_OF_ENDER)); //应该是这个函数有点问题 
 			$this->tryDestroyingPortal($this);
 		}
-		return false;
+		return true;
 	}
 
 	public function isCompletedPortal(Block $center) : bool{
