@@ -144,7 +144,7 @@ class EndPortalFrame extends Solid implements SolidLight{
 	}
 
 	public function destroyPortal(Block $center) : void{
-		$pos = $center->asPosition();
+		$pos = $center->asPosition(); //移植过来的，不知道这是什么滚木函数
 		$level = $pos->getLevel();
 		for($i = -1; $i <= 1; ++$i){
 			for($j = -1; $j <= 1; ++$j){
