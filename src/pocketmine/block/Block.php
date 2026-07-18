@@ -887,7 +887,7 @@ class Block extends Position implements BlockIds, Metadatable{
 		}
 	}
 
-	public function asPosition() {
+	/*public function asPosition() {
 		//未知函数
-	}
+	}*/
 }
