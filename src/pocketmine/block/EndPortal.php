@@ -72,4 +72,12 @@ class EndPortal extends Solid implements SolidLight {
 	public function isBreakable(Item $item){
 		return false;
 	}
+
+	public function canPassThrough(){
+		return true;
+	}
+
+	public function hasEntityCollision(){
+		return true;
+	}
 }
