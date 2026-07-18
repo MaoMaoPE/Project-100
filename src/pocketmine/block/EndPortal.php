@@ -68,7 +68,7 @@ class EndPortal extends Transparent{
 		if($entity->getLevel()->getDimension() === 2){
 			$entity->teleport(Server::getInstance()->getDefaultLevel()->getSafeSpawn());
 			//$entity->travelToDimension(0);
-		}elseif ($entity->getLevel()->getDimension() === Server::getInstance()->getDefaultLevel()){
+		}elseif ($entity->getLevel()->getDimension() === 0){
 			$entity->teleport(Server::getInstance()->getEnderLevel()->getSafeSpawn());
 			//$entity->travelToDimension(2);
 		}
