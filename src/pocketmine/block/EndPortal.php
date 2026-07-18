@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use Generator;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\protocol\types\DimensionIds;
@@ -64,7 +65,7 @@ class EndPortal extends Transparent{
 
 	public function onEntityCollide(Entity $entity) : void{
 		$server = Server::getInstance();
-		if($entity->getLevel()->getDimension() === Server::getInstance()->getEnderLevel()){
+		if($entity->getLevel()->getDimension() === 2){
 			$entity->teleport(Server::getInstance()->getDefaultLevel()->getSafeSpawn());
 			//$entity->travelToDimension(0);
 		}elseif ($entity->getLevel()->getDimension() === Server::getInstance()->getDefaultLevel()){
