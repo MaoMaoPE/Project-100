@@ -89,7 +89,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 		return $work;
 	}
 
-	public function closeSession($identifier, $reason){
+	public function closeSession($identifier, $reason): void{
 		if(isset($this->players[$identifier])){
 			$player = $this->players[$identifier];
 			unset($this->identifiers[spl_object_hash($player)]);

@@ -41,7 +41,7 @@ class Water extends Liquid{
 		return 2;
 	}
 
-	public function onEntityCollide(Entity $entity){
+	public function onEntityCollide(Entity $entity): void{
 		$entity->resetFallDistance();
 		if($entity->fireTicks > 0){
 			$entity->extinguish();
@@ -50,7 +50,7 @@ class Water extends Liquid{
 		$entity->resetFallDistance();
 	}
 
-	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
+	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null): bool{
 		$ret = $this->getLevel()->setBlock($this, $this, true, false);
 		$this->getLevel()->scheduleUpdate($this, $this->tickRate());
 
