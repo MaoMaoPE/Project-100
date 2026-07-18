@@ -103,7 +103,7 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 			$this->players[$identifier]->setPing($ping);
 		}
 	}
-	public function close(Player $player, $reason = "unknown reason"){
+	public function close(Player $player, $reason = "unknown reason"): void{
 		if(isset($this->identifiers[$h = spl_object_hash($player)])){
 			unset($this->players[$this->identifiers[$h]]);
 			unset($this->identifiersACK[$this->identifiers[$h]]);
@@ -112,15 +112,15 @@ class RakLibInterface implements ServerInstance, AdvancedSourceInterface{
 		}
 	}
 
-	public function shutdown(){
+	public function shutdown(): void {
 		$this->interface->shutdown();
 	}
 
-	public function emergencyShutdown(){
+	public function emergencyShutdown(): void{
 		$this->interface->emergencyShutdown();
 	}
 
-	public function openSession($identifier, $address, $port, $clientID){
+	public function openSession($identifier, $address, $port, $clientID): void{
 		$ev = new PlayerCreationEvent($this, Player::class, Player::class, null, $address, $port);
 		$this->server->getPluginManager()->callEvent($ev);
 		$class = $ev->getPlayerClass();
