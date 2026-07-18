@@ -457,6 +457,16 @@ class Server{
 		return $this->maxPlayers;
 	}
 
+	public function getEnderLevel() {
+		return $this->enderLevel;
+	}
+
+	public function setTheEndLevel(Level $level) : void{
+		if($level === null or ($this->isLevelLoaded($level->getFolderName()) and $level !== $this->enderLevel)){
+			$this->enderLevel = $level;
+		}
+	}
+
 	/**
 	 * @return int
 	 */

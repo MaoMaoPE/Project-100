@@ -1,83 +1,85 @@
 <?php
 
 /*
- *
- *  ____            _        _   __  __ _                  __  __ ____  
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \ 
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/ 
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_| 
+ *               _ _
+ *         /\   | | |
+ *        /  \  | | |_ __ _ _   _
+ *       / /\ \ | | __/ _` | | | |
+ *      / ____ \| | || (_| | |_| |
+ *     /_/    \_|_|\__\__,_|\__, |
+ *                           __/ |
+ *                          |___/
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
- * 
+ * @author TuranicTeam
+ * @link https://github.com/TuranicTeam/Altay
  *
-*/
+ */
+
+declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\entity\Entity;
 use pocketmine\item\Item;
+use pocketmine\network\mcpe\protocol\types\DimensionIds;
+use pocketmine\Player;
+use pocketmine\Server;
 
-class EndPortal extends Solid implements SolidLight {
+class EndPortal extends Transparent{
 
 	protected $id = self::END_PORTAL;
 
-	/**
-	 * EndPortal constructor.
-	 *
-	 * @param int $meta
-	 */
-	public function __construct($meta = 0){
+	public function __construct(int $meta = 0){
 		$this->meta = $meta;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getLightLevel(){
+	public function getLightLevel() : int{
 		return 1;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getName() : string{
 		return "End Portal";
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getHardness(){
+	public function getHardness() : float{
 		return -1;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getResistance(){
+	public function getBlastResistance() : float{
 		return 18000000;
 	}
 
-	/**
-	 * @param Item $item
-	 *
-	 * @return bool
-	 */
-	public function isBreakable(Item $item){
+	public function isBreakable(Item $item) : bool{
 		return false;
 	}
 
-	public function canPassThrough(){
+	public function hasEntityCollision() : bool{
 		return true;
 	}
 
-	public function hasEntityCollision(){
-		return true;
+	public function onEntityCollide(Entity $entity) : void{
+		$server = Server::getInstance();
+		if($entity->getLevel()->getDimension() === 2){
+			$entity->teleport(Server::getInstance()->getDefaultLevel()->getSafeSpawn());
+		}else{
+			$entity->teleport(Server::getInstance()->getEnderLevel()->getSafeSpawn());
+			//$entity->travelToDimension(2);
+		}
 	}
+
+	/*public function onBreak(Item $item, Player $player = null) : bool{
+		$result = parent::onBreak($item, $player);
+
+		foreach($this->getAllSides() as $side){
+			if($side instanceof self){
+				$side->onBreak($item, $player);
+			}
+		}
+		return $result;
+	}*/
 }
