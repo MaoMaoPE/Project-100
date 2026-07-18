@@ -73,7 +73,7 @@ class EndPortalFrame extends Solid implements SolidLight {
     }
 
     public function canBeActivated() : bool{
-        return false;
+        return true;
     }
 
     public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
@@ -85,7 +85,7 @@ class EndPortalFrame extends Solid implements SolidLight {
     }
 
     public function onActivate(Item $item, Player $player = null){
-        return false;
+        return true;
     }
 
     public function getDrops(Item $item) : array{
