@@ -559,6 +559,18 @@ abstract class Entity extends Location implements Metadatable{
 		return false;
 	}
 
+	public function travelToDimension(int $dimensionId) : void{
+		if($dimensionId === 1){
+			$targetLevel = $this->server->getNetherLevel();
+		}elseif($dimensionId === 2){
+			$targetLevel = $this->server->getEnderLevel();
+		}else{
+			$targetLevel = $this->server->getDefaultLevel();
+		}
+
+		$this->teleport($targetLevel->getSafeSpawn()); // TODO: more work for spawn points
+	}
+
 	public function getEffect($effectId){
 		return isset($this->effects[$effectId]) ? $this->effects[$effectId] : null;
 	}

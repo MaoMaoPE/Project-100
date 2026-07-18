@@ -457,11 +457,21 @@ class Server{
 		return $this->maxPlayers;
 	}
 
+	public function getNetherLevel() {
+		return $this->netherLevel;
+	}
+
+	public function setNetherLevel(Level $level) : void{
+		if($level === null or ($this->isLevelLoaded($level->getFolderName()) and $level !== $this->netherLevel)){
+			$this->netherLevel = $level;
+		}
+	}
+
 	public function getEnderLevel() {
 		return $this->enderLevel;
 	}
 
-	public function setTheEndLevel(Level $level) : void{
+	public function setEnderLevel(Level $level) : void{
 		if($level === null or ($this->isLevelLoaded($level->getFolderName()) and $level !== $this->enderLevel)){
 			$this->enderLevel = $level;
 		}
