@@ -887,6 +887,26 @@ class Block extends Position implements BlockIds, Metadatable{
 		}
 	}
 
+	public function getHorizontalSides() : array{
+		return [
+			$this->getSide(Vector3::SIDE_NORTH),
+			$this->getSide(Vector3::SIDE_SOUTH),
+			$this->getSide(Vector3::SIDE_WEST),
+			$this->getSide(Vector3::SIDE_EAST)
+		];
+	}
+
+
+	public function getAllSides() : array{
+		return array_merge(
+			[
+				$this->getSide(Vector3::SIDE_DOWN),
+				$this->getSide(Vector3::SIDE_UP)
+			],
+			$this->getHorizontalSides()
+		);
+	}
+
 	/*public function asPosition() {
 		//未知函数
 	}*/

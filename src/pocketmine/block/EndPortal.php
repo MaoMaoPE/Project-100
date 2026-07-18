@@ -72,7 +72,7 @@ class EndPortal extends Transparent{
 		}
 	}
 
-	/*public function onBreak(Item $item, Player $player = null) : bool{
+	public function onBreak(Item $item, Player $player = null) : bool{
 		$result = parent::onBreak($item, $player);
 
 		foreach($this->getAllSides() as $side){
@@ -81,5 +81,5 @@ class EndPortal extends Transparent{
 			}
 		}
 		return $result;
-	}*/
+	}
 }
