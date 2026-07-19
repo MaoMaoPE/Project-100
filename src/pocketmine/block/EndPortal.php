@@ -64,12 +64,12 @@ class EndPortal extends Transparent{
 
 	public function onEntityCollide(Entity $entity) : void{
 		$server = Server::getInstance();
-		if($entity->getLevel()->getDimension() === 2){
-			//$entity->teleport(Server::getInstance()->getDefaultLevel()->getSafeSpawn());
-			$entity->travelToDimension(0);
-		}else/*if ($entity->getLevel()->getDimension() === 0)*/{
+		if($entity->getLevel()->getDimension() === Server::getInstance()->getEnderLevel()){
+			$entity->teleport(Server::getInstance()->getDefaultLevel()->getSafeSpawn());
+			//$entity->travelToDimension(0);
+		}elseif ($entity->getLevel()->getDimension() === Server::getInstance()->getDefaultLevel()){
 			$entity->teleport(Server::getInstance()->getEnderLevel()->getSafeSpawn());
-			$entity->travelToDimension(2);
+			//$entity->travelToDimension(2);
 		}
 	}
 
