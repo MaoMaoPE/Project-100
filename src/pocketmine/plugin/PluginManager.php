@@ -773,7 +773,7 @@ class PluginManager{
 						$class = $type->getName();
 						if(is_subclass_of($class, Event::class)){
 							$reflection = new \ReflectionClass($class);
-							if(str_contains((string) $reflection->getDocComment(), "@deprecated") && $this->server->getProperty("settings.deprecated-verbose", true)){
+							if(strpos((string) $reflection->getDocComment(), "@deprecated") && $this->server->getProperty("settings.deprecated-verbose", true)){
 								$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.deprecatedEvent", [
 									$plugin->getName(),
 									$class,
