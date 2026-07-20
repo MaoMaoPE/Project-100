@@ -1879,7 +1879,7 @@ abstract class Entity extends Location implements Metadatable{
 		}
 	}
 
-	public function setLinked($type = 0, Entity $entity){
+	public function setLinked($type, Entity $entity){
 		if($type != 0 and $entity === null){
 			return false;
 		}
