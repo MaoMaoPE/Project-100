@@ -779,7 +779,7 @@ class PluginManager{
 						}
 						$this->registerEvent($class, $listener, $priority, new MethodEventExecutor($method->getName()), $plugin, $ignoreCancelled);
 					}
-				} else {
+				} else if (version_compare("8.0", PHP_VERSION) < 0) {
 					// PHP版本大于8.0的
 					if(count($parameters) === 1 and $parameters[0]->getType() instanceof \ReflectionClass and is_subclass_of($parameters[0]->getType()->getName(), Event::class)){
 						$class = $parameters[0]->getType()->getName();
