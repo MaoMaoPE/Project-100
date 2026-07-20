@@ -765,34 +765,18 @@ class PluginManager{
 				}
 
 				$parameters = $method->getParameters();
-				if (version_compare("8.0", PHP_VERSION) > 0) {
-					// PHP版本小于8.0的
-					if(count($parameters) === 1 and $parameters[0]->getClass() instanceof \ReflectionClass and is_subclass_of($parameters[0]->getClass()->getName(), Event::class)){
-						$class = $parameters[0]->getClass()->getName();
-						$reflection = new \ReflectionClass($class);
-						if(strpos((string) $reflection->getDocComment(), "@deprecated") !== false and $this->server->getProperty("settings.deprecated-verbose", true)){
-							$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.deprecatedEvent", [
-								$plugin->getName(),
-								$class,
-								get_class($listener) . "->" . $method->getName() . "()"
-							]));
-						}
-						$this->registerEvent($class, $listener, $priority, new MethodEventExecutor($method->getName()), $plugin, $ignoreCancelled);
+				// PHP版本大于8.0的
+				if(count($parameters) === 1 and $parameters[0]->getType() instanceof \ReflectionClass and is_subclass_of($parameters[0]->getType()->getName(), Event::class)){
+					$class = $parameters[0]->getType()->getName();
+					$reflection = new \ReflectionClass($class);
+					if(strpos((string) $reflection->getDocComment(), "@deprecated") !== false and $this->server->getProperty("settings.deprecated-verbose", true)){
+						$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.deprecatedEvent", [
+							$plugin->getName(),
+							$class,
+							get_class($listener) . "->" . $method->getName() . "()"
+						]));
 					}
-				} else if (version_compare("8.0", PHP_VERSION) < 0) {
-					// PHP版本大于8.0的
-					if(count($parameters) === 1 and $parameters[0]->getType() instanceof \ReflectionClass and is_subclass_of($parameters[0]->getType()->getName(), Event::class)){
-						$class = $parameters[0]->getType()->getName();
-						$reflection = new \ReflectionClass($class);
-						if(strpos((string) $reflection->getDocComment(), "@deprecated") !== false and $this->server->getProperty("settings.deprecated-verbose", true)){
-							$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.plugin.deprecatedEvent", [
-								$plugin->getName(),
-								$class,
-								get_class($listener) . "->" . $method->getName() . "()"
-							]));
-						}
-						$this->registerEvent($class, $listener, $priority, new MethodEventExecutor($method->getName()), $plugin, $ignoreCancelled);
-					}
+					$this->registerEvent($class, $listener, $priority, new MethodEventExecutor($method->getName()), $plugin, $ignoreCancelled);
 				}
 			}
 		}
