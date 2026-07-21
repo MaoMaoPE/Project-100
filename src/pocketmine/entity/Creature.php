@@ -74,6 +74,10 @@ abstract class Creature extends Living{
 		return false;
 	}
 
+	public function getSpeed(): float {
+        return 0.7;
+    }
+
 	public function attack($damage, EntityDamageEvent $source){
 		parent::attack($damage, $source);
 		if(!$source->isCancelled() and $source->getCause() == EntityDamageEvent::CAUSE_ENTITY_ATTACK){

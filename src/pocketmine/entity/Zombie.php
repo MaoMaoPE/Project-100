@@ -119,7 +119,7 @@ class Zombie extends Monster{
 			return false;
 		}
 		
-		return parent::onUpdate($currentTick);
+		//return parent::onUpdate($currentTick);
 		
 		$this->lastUpdate = $currentTick;
 

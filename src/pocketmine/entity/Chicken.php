@@ -32,9 +32,14 @@ class Chicken extends Animal{
 
 	public $width = 0.6;
 	public $length = 0.6;
-	public $height = 1.8;
+	public $height = 0.6;
+	public $speed = 1.0;
 
 	public $dropExp = [1, 3];
+
+	public function getSpeed(): float {
+		return $this->speed;
+	}
 	
 	public function getName() : string{
 		return "Chicken";
