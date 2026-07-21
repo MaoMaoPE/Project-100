@@ -172,8 +172,8 @@ class BinaryStream extends \stdClass{
 		return ord($this->buffer[$this->offset++]);
 	}
 
-	public function putByte($v){
-		$this->buffer .= chr($v);
+	public function putByte($v = 0): void{
+		$this->buffer .= chr((int) $v);
 	}
 
 	public function getUUID(){
@@ -229,7 +229,7 @@ class BinaryStream extends \stdClass{
 	}
 
 	public function putString($v){
-		$this->putUnsignedVarInt(strlen($v));
+		$this->putUnsignedVarInt(strlen($v ?? ""));
 		$this->put($v);
 	}
 
