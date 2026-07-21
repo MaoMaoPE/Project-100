@@ -119,7 +119,7 @@ class Zombie extends Monster{
 			return false;
 		}
 		
-		//return parent::onUpdate($currentTick);
+		return parent::onUpdate($currentTick); //不行这AI还是太抽象了
 		
 		$this->lastUpdate = $currentTick;
 
