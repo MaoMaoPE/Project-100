@@ -1010,7 +1010,7 @@ class Item implements ItemIds, \JsonSerializable{
 		return "Item " . $this->name . " (" . $this->id . ":" . ($this->meta === null ? "?" : $this->meta) . ")x" . $this->count . ($this->hasCompoundTag() ? " tags:0x" . bin2hex($this->getCompoundTag()) : "");
 	}
 
-	final public function jsonSerialize(){
+	final public function jsonSerialize(): mixed{
 		return [
 			"id" => $this->id,
 			"damage" => $this->meta,
