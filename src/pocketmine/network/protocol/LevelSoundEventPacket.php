@@ -150,4 +150,8 @@ class LevelSoundEventPacket extends DataPacket{
 		$this->putBool($this->unknownBool);
 		$this->putBool($this->unknownBool2);
 	}
+
+	public function getName() {
+		return "LevelSoundEventPacket";
+	}
 }
