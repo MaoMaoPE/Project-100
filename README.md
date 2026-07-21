@@ -3,6 +3,12 @@ Project 100 (GenisysGT)
 
 一个 Minecraft：PE 1.0.0 -> 1.0.9 的互通服务端
 
+启动此核心需要[PHP 8.0](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.0-latest)
+
+也可以选择[PHP 8.2](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.2-latest)
+
+本服务端不支持PHP 7.x
+
 目前正在修复BUG
 
 
