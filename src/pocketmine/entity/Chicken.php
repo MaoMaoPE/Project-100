@@ -21,9 +21,11 @@
 
 namespace pocketmine\entity;
 
+use Override;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\math\Vector3;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -35,11 +37,12 @@ class Chicken extends Animal{
 	public $height = 0.6;
 	public $speed = 1.0;
 
-	public $dropExp = [1, 3];
+	private $moveDirection = null; //移动方向
+	private $tempTicker = 0;
+	private $tempTicking = false;
+	private $moveTicker = 0; //运动计时器
 
-	public function getSpeed(): float {
-		return $this->speed;
-	}
+	public $dropExp = [1, 3];
 	
 	public function getName() : string{
 		return "Chicken";
@@ -65,6 +68,37 @@ class Chicken extends Animal{
 		$pk->metadata = $this->dataProperties;
 		$player->dataPacket($pk);
 		parent::spawnTo($player);
+	}
+
+	private function generateRandomDirection(){ //运动
+		return new Vector3(mt_rand(-1000, 1000) / 1000, 0, mt_rand(-1000, 1000) / 1000);
+	}
+
+	private function getVelY(){
+		$expectedPos = (new Vector3($this->x + $this->moveDirection->x * $this->moveSpeed, $this->y + $this->motionY, $this->z + $this->moveDirection->z * $this->moveSpeed))->round();
+		$block0 = $this->getLevel()->getBlock($expectedPos);
+		$block1 = $this->getLevel()->getBlock($expectedPos->add(0, 1, 0));
+		if($block1->getId() != 0) return 1.2;
+		return 0;
+	}
+
+	#[Override]
+	public function onUpdate($tick) { //TODO 鸡的AI
+		if (!$this->closed !== false) return false;
+
+		if($this->motionX ** 2 + $this->motionZ ** 2 <= $this->moveDirection->lengthSquared()){
+			$motionY = $this->getVelY(); //僵尸运动计算
+			if($motionY >= 0){
+				$this->motionX = $this->moveDirection->x * $this->speed;
+				$this->motionZ = $this->moveDirection->z * $this->speed;
+				$this->motionY = $motionY;
+			}else{
+				$this->moveDirection = $this->generateRandomDirection(); //生成随机运动方向
+				$this->moveTicker = 0;
+				$this->tempTicking = true;
+			}
+		}
+		return parent::onUpdate($tick);
 	}
 	
 	public function getDrops(){
