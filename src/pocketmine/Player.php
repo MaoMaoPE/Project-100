@@ -4123,16 +4123,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	protected function checkChunks(){
-		$chunkX = (int) $this->x >> 4;
-		$chunkZ = (int) $this->z >> 4;
-		if ($this->chunk === null or ($this->chunk->getX() !== $chunkX or $this->chunk->getZ() !== $chunkZ)) {
-			if ($this->chunk !== null) {
+		if($this->chunk === null || ($this->chunk->getX() !== ((int) $this->x >> 4) || $this->chunk->getZ() !== ((int) $this->z >> 4))){
+			if($this->chunk !== null){
 				$this->chunk->removeEntity($this);
 			}
-			$this->chunk = $this->level->getChunk($chunkX, $chunkZ, true);
+			$this->chunk = $this->level->getChunk((int) $this->x >> 4, (int) $this->z >> 4, true);
 
-			if (!$this->justCreated) {
-				$newChunk = $this->level->getChunkPlayers((int) $chunkX, (int) $chunkZ);
+			if(!$this->justCreated){
+				$newChunk = $this->level->getChunkPlayers((int) $this->x >> 4, (int) $this->z >> 4);
 				unset($newChunk[$this->getLoaderId()]);
 
 				/** @var Player[] $reload */
@@ -4156,6 +4154,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 
 			$this->chunk->addEntity($this);
+		}$this->chunk->addEntity($this);
 		}
 	}
 
