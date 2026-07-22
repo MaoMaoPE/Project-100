@@ -144,7 +144,7 @@ class Random{
 	}
 
 	public function nextBoundedInt($bound){
-		return floor($this->nextInt() % $bound);
+		return ((int) $this->nextInt() % $bound);
 	}
 
 }
