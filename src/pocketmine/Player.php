@@ -4154,9 +4154,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			}
 
 			$this->chunk->addEntity($this);
-		}$this->chunk->addEntity($this);
 		}
 	}
+	
 
 	protected function checkTeleportPosition(){
 		if($this->teleportPosition !== null){
