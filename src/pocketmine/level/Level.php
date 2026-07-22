@@ -562,10 +562,10 @@ class Level implements ChunkManager, Metadatable{
 		if($players === null){
 			if($pk !== null){
 				if(!is_array($pk)){
-					$this->addChunkPacket($particle->x >> 4, $particle->z >> 4, $pk);
+					$this->addChunkPacket((int) $particle->x >> 4, (int) $particle->z >> 4, $pk);
 				}else{
 					foreach($pk as $e){
-						$this->addChunkPacket($particle->x >> 4, $particle->z >> 4, $e);
+						$this->addChunkPacket((int) $particle->x >> 4, (int) $particle->z >> 4, $e);
 					}
 				}
 			}

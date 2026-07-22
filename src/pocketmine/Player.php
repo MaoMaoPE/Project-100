@@ -1073,8 +1073,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$newOrder = [];
 		$unloadChunks = $this->usedChunks;
 
-		$centerX = $this->x >> 4;
-		$centerZ = $this->z >> 4;
+		$centerX = (int) $this->x >> 4;
+		$centerZ = (int) $this->z >> 4;
 
 		for($x = 0; $x < $radius; ++$x){
 			for($z = 0; $z <= $x; ++$z){
