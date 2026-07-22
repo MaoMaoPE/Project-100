@@ -2506,7 +2506,7 @@ class Level implements ChunkManager, Metadatable{
 	}
 
 	public function canBlockSeeSky(Vector3 $pos) : bool{
-		return $this->getHighestBlockAt($pos->getFloorX(), $pos->getFloorZ()) < $pos->getY();
+		return $this->getHighestBlockAt((int) $pos->getFloorX(), (int) $pos->getFloorZ()) < $pos->getY();
 	}
 
 	/**
