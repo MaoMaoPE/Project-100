@@ -119,4 +119,6 @@ interface ChunkManager{
 	 * @return int|string
 	 */
 	public function getSeed();
+
+	public function getWaterHeight() : int;
 }
