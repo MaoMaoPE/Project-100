@@ -1830,7 +1830,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->teleport($this->shouldResPos = $netherLevel->getSafeSpawn());
 						}elseif($this->fromPos instanceof Position){
 							if(!($this->getLevel()->isChunkLoaded((int) $this->fromPos->x, (int) $this->fromPos->z))){
-								$this->getLevel()->loadChunk($this->fromPos->x, $this->fromPos->z);
+								$this->getLevel()->loadChunk((int) $this->fromPos->x, (int) $this->fromPos->z);
 							}
 							$add = [1, 0, -1, 0, 0, 1, 0, -1];
 							$tempos = null;

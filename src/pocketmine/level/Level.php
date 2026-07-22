@@ -691,7 +691,7 @@ class Level implements ChunkManager, Metadatable{
 		$this->cancelUnloadChunkRequest($chunkX, $chunkZ);
 
 		if($autoLoad){
-			$this->loadChunk($chunkX, $chunkZ);
+			$this->loadChunk((int) $chunkX, (int) $chunkZ);
 		}
 	}
 
@@ -2324,7 +2324,7 @@ class Level implements ChunkManager, Metadatable{
 	public function getChunk(int $x, int $z, bool $create = false){
 		if(isset($this->chunks[$index = Level::chunkHash($x, $z)])){
 			return $this->chunks[$index];
-		}elseif($this->loadChunk($x, $z, $create)){
+		}elseif($this->loadChunk((int) $x, (int) $z, (bool) $create)){
 			return $this->chunks[$index];
 		}
 
