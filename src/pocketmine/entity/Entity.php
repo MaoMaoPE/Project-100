@@ -1817,7 +1817,7 @@ abstract class Entity extends Location implements Metadatable{
 		if($this->chunk === null or $this->closed){
 			return;
 		}
-		foreach($this->level->getChunkPlayers($this->chunk->getX(), $this->chunk->getZ()) as $player){
+		foreach($this->level->getChunkPlayers((int) $this->chunk->getX(), (int) $this->chunk->getZ()) as $player){
 			if($player->isOnline()){
 				$this->spawnTo($player);
 			}
