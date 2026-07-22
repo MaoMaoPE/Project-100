@@ -701,7 +701,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		foreach($this->server->getCommandMap()->getCommands() as $command){
 			if (($cmdData = $command->generateCustomCommandData($this)) !== null){
 				++$count;
-				
+
 				if(!isset($data->{$command->getName()})) $data->{$command->getName()} = new \stdClass();
 				if(!isset($data->{$command->getName()}->versions)) $data->{$command->getName()}->versions = [];
 
@@ -4127,10 +4127,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			if($this->chunk !== null){
 				$this->chunk->removeEntity($this);
 			}
-			$this->chunk = $this->level->getChunk($this->x >> 4, $this->z >> 4, true);
+			$this->chunk = $this->level->getChunk((int) $this->x >> 4, (int) $this->z >> 4, true);
 
 			if(!$this->justCreated){
-				$newChunk = $this->level->getChunkPlayers($this->x >> 4, $this->z >> 4);
+				$newChunk = $this->level->getChunkPlayers((int) $this->x >> 4, (int) $this->z >> 4);
 				unset($newChunk[$this->getLoaderId()]);
 
 				/** @var Player[] $reload */
