@@ -75,7 +75,7 @@ class Chicken extends Animal{
 	}
 
 	private function getVelY(){
-		$expectedPos = (new Vector3($this->x + $this->moveDirection->x * $this->moveSpeed, $this->y + $this->motionY, $this->z + $this->moveDirection->z * $this->moveSpeed))->round();
+		$expectedPos = (new Vector3($this->x + $this->moveDirection->x * $this->speed, $this->y + $this->motionY, $this->z + $this->moveDirection->z * $this->moveSpeed))->round();
 		$block0 = $this->getLevel()->getBlock($expectedPos);
 		$block1 = $this->getLevel()->getBlock($expectedPos->add(0, 1, 0));
 		if($block1->getId() != 0) return 1.2;
@@ -85,6 +85,8 @@ class Chicken extends Animal{
 	#[Override]
 	public function onUpdate($tick) { //TODO 鸡的AI
 		if (!$this->closed !== false) return false;
+
+		$hasUpdate = parent::onUpdate($tick);
 
 		if($this->motionX ** 2 + $this->motionZ ** 2 <= $this->moveDirection->lengthSquared()){
 			$motionY = $this->getVelY(); //僵尸运动计算
@@ -98,7 +100,7 @@ class Chicken extends Animal{
 				$this->tempTicking = true;
 			}
 		}
-		return parent::onUpdate($tick);
+		return $hasUpdate or !$this->onGround or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
 	
 	public function getDrops(){
