@@ -255,8 +255,8 @@ class FishingHook extends Projectile {
             $pos = new Vector3($this->x, $this->getWaterHeight(), $this->z);
             $motion = $player->subtract($pos)->multiply(0.2);
             $motion->y += sqrt($player->add(0, $player->getEyeHeight(), 0)->distance($pos)) * 0.08;
-            /*          
-            $event = new ProjectileHitEvent($this, null, null, null);
+
+/*            $event = new ProjectileHitEvent($this, null, null, null);
             $this->server->getPluginManager()->callEvent($event);
             if ($event->isCancelled()) {
                 $this->close();

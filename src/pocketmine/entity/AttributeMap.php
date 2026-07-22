@@ -51,19 +51,19 @@ class AttributeMap implements \ArrayAccess{
 		});
 	}
 
-	public function offsetExists(mixed $offset): bool{
+	public function offsetExists($offset){
 		return isset($this->attributes[$offset]);
 	}
 
-	public function offsetGet(mixed $offset): mixed{
+	public function offsetGet($offset){
 		return $this->attributes[$offset]->getValue();
 	}
 
-	public function offsetSet(mixed $offset, mixed $value): void{
+	public function offsetSet($offset, $value){
 		$this->attributes[$offset]->setValue($value);
 	}
 
-	public function offsetUnset(mixed $offset): void{
+	public function offsetUnset($offset){
 		throw new \RuntimeException("Could not unset an attribute from an attribute map");
 	}
 }

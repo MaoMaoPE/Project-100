@@ -282,7 +282,7 @@ abstract class Door extends Transparent implements ElectricalAppliance{
 			if($down->getId() === $this->getId()){
 				$meta = $down->getDamage() ^ 0x04;
 				$this->getLevel()->setBlock($down, Block::get($this->getId(), $meta), true);
-				$players = $this->getLevel()->getChunkPlayers((int) $this->x >> 4,(int) $this->z >> 4);
+				$players = $this->getLevel()->getChunkPlayers($this->x >> 4, $this->z >> 4);
 				if($player instanceof Player){
 					unset($players[$player->getLoaderId()]);
 				}

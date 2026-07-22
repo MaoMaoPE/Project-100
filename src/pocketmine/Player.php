@@ -701,10 +701,12 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		foreach($this->server->getCommandMap()->getCommands() as $command){
 			if (($cmdData = $command->generateCustomCommandData($this)) !== null){
 				++$count;
-
-				if(!isset($data->{$command->getName()})) $data->{$command->getName()} = new \stdClass();
-				if(!isset($data->{$command->getName()}->versions)) $data->{$command->getName()}->versions = [];
-
+				if(!isset($data->{$command->getName()})){
+					$data->{$command->getName()} = new \stdClass();
+				}
+				if(!isset($data->{$command->getName()}->versions)){
+					$data->{$command->getName()}->versions = [];
+				}
 				$data->{$command->getName()}->versions[0] = $cmdData;
 			}
 		}
@@ -1071,8 +1073,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		$newOrder = [];
 		$unloadChunks = $this->usedChunks;
 
-		$centerX = (int) $this->x >> 4;
-		$centerZ = (int) $this->z >> 4;
+		$centerX = $this->x >> 4;
+		$centerZ = $this->z >> 4;
 
 		for($x = 0; $x < $radius; ++$x){
 			for($z = 0; $z <= $x; ++$z){
@@ -1690,7 +1692,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					if($to->distanceSquared($ev->getTo()) > 0.01){ //If plugins modify the destination
 						$this->teleport($ev->getTo());
 					}else{
-						$this->level->addEntityMovement((int) $this->x >> 4, (int) $this->z >> 4, $this->getId(), $this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
+						$this->level->addEntityMovement($this->x >> 4, $this->z >> 4, $this->getId(), $this->x, $this->y + $this->getEyeHeight(), $this->z, $this->yaw, $this->pitch, $this->yaw);
 					}
 
 					if($this->fishingHook instanceof FishingHook){
@@ -1829,8 +1831,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 							$this->fromPos->z = ((int) $this->fromPos->z) + 0.5;
 							$this->teleport($this->shouldResPos = $netherLevel->getSafeSpawn());
 						}elseif($this->fromPos instanceof Position){
-							if(!($this->getLevel()->isChunkLoaded((int) $this->fromPos->x, (int) $this->fromPos->z))){
-								$this->getLevel()->loadChunk((int) $this->fromPos->x, (int) $this->fromPos->z);
+							if(!($this->getLevel()->isChunkLoaded($this->fromPos->x, $this->fromPos->z))){
+								$this->getLevel()->loadChunk($this->fromPos->x, $this->fromPos->z);
 							}
 							$add = [1, 0, -1, 0, 0, 1, 0, -1];
 							$tempos = null;
@@ -2358,7 +2360,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 				$newPos = new Vector3($packet->x, $packet->y - $this->getEyeHeight(), $packet->z);
 
-				if($newPos->distanceSquared($this) == 0 && fmod($packet->yaw, 360) === $this->yaw && fmod($packet->pitch, 360) === $this->pitch){ //player hasn't moved, just client spamming packets
+				if($newPos->distanceSquared($this) == 0 and ($packet->yaw % 360) === $this->yaw and ($packet->pitch % 360) === $this->pitch){ //player hasn't moved, just client spamming packets
 					break;
 				}
 
@@ -2371,8 +2373,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				if($this->teleportPosition !== null or ($this->forceMovement instanceof Vector3 and ($newPos->distanceSquared($this->forceMovement) > 0.1 or $revert))){
 					$this->sendPosition($this->forceMovement, $packet->yaw, $packet->pitch, MovePlayerPacket::MODE_RESET);
 				}else{
-					$packet->yaw = fmod($packet->yaw, 360);
-					$packet->pitch = fmod($packet->yaw, 360);
+					$packet->yaw %= 360;
+					$packet->pitch %= 360;
 
 					if($packet->yaw < 0){
 						$packet->yaw += 360;
@@ -4123,14 +4125,14 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	}
 
 	protected function checkChunks(){
-		if($this->chunk === null || ($this->chunk->getX() !== ((int) $this->x >> 4) || $this->chunk->getZ() !== ((int) $this->z >> 4))){
+		if($this->chunk === null or ($this->chunk->getX() !== ($this->x >> 4) or $this->chunk->getZ() !== ($this->z >> 4))){
 			if($this->chunk !== null){
 				$this->chunk->removeEntity($this);
 			}
-			$this->chunk = $this->level->getChunk((int) $this->x >> 4, (int) $this->z >> 4, true);
+			$this->chunk = $this->level->getChunk($this->x >> 4, $this->z >> 4, true);
 
 			if(!$this->justCreated){
-				$newChunk = $this->level->getChunkPlayers((int) $this->x >> 4, (int) $this->z >> 4);
+				$newChunk = $this->level->getChunkPlayers($this->x >> 4, $this->z >> 4);
 				unset($newChunk[$this->getLoaderId()]);
 
 				/** @var Player[] $reload */
@@ -4156,12 +4158,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			$this->chunk->addEntity($this);
 		}
 	}
-	
 
 	protected function checkTeleportPosition(){
 		if($this->teleportPosition !== null){
-			$chunkX = (int) $this->teleportPosition->x >> 4;
-			$chunkZ = (int) $this->teleportPosition->z >> 4;
+			$chunkX = $this->teleportPosition->x >> 4;
+			$chunkZ = $this->teleportPosition->z >> 4;
 
 			for($X = -1; $X <= 1; ++$X){
 				for($Z = -1; $Z <= 1; ++$Z){

@@ -111,8 +111,8 @@ class Normal extends Generator{
 	public function pickBiome($x, $z){
 		$hash = $x * 2345803 ^ $z * 9236449 ^ $this->level->getSeed();
 		$hash *= $hash + 223;
-		$xNoise = (int) $hash >> 20 & 3;
-		$zNoise = (int) $hash >> 22 & 3;
+		$xNoise = $hash >> 20 & 3;
+		$zNoise = $hash >> 22 & 3;
 		if($xNoise == 3){
 			$xNoise = 1;
 		}

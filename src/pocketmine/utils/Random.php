@@ -143,8 +143,8 @@ class Random{
 		return $start + ($this->nextInt() % ($end + 1 - $start));
 	}
 
-	public function nextBoundedInt(int $bound): int{
-		return ($this->nextInt() % $bound);
+	public function nextBoundedInt($bound){
+		return $this->nextInt() % $bound;
 	}
 
 }
