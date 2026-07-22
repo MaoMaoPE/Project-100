@@ -39,6 +39,8 @@ class Sheep extends Animal implements Colorable{
 	public $width = 0.625;
 	public $length = 1.4375;
 	public $height = 1.8;
+
+	public $dropExp = [2, 2];
 	
 	public function getName() : string{
 		return "Sheep";
@@ -111,7 +113,7 @@ class Sheep extends Animal implements Colorable{
 			if($damager instanceof Player){
 				$lootingL = $damager->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
 				$drops = [ItemItem::get(ItemItem::RAW_MUTTON, 0, mt_rand(1, 3 + $lootingL))];
-				$drops[] = ItemItem::get(ItemItem::WOOL, $this->getColor(), mt_rand(0, 2 + $lootingL));
+				$drops[] = ItemItem::get(ItemItem::WOOL, $this->getColor(), mt_rand(1, 1 + $lootingL));
 
 				return $drops;
 			}
