@@ -2334,7 +2334,7 @@ class Level implements ChunkManager, Metadatable{
 	public function generateChunkCallback(int $x, int $z, Chunk $chunk){
 		Timings::$generationCallbackTimer->startTiming();
 		if(isset($this->chunkPopulationQueue[$index = Level::chunkHash($x, $z)])){
-			$oldChunk = $this->getChunk($x, $z, false);
+			$oldChunk = $this->getChunk((int) $x, (int) $z, false);
 			for($xx = -1; $xx <= 1; ++$xx){
 				for($zz = -1; $zz <= 1; ++$zz){
 					unset($this->chunkPopulationLock[Level::chunkHash($x + $xx, $z + $zz)]);
