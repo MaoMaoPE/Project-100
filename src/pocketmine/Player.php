@@ -4161,8 +4161,8 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	protected function checkTeleportPosition(){
 		if($this->teleportPosition !== null){
-			$chunkX = $this->teleportPosition->x >> 4;
-			$chunkZ = $this->teleportPosition->z >> 4;
+			$chunkX = (int) $this->teleportPosition->x >> 4;
+			$chunkZ = (int) $this->teleportPosition->z >> 4;
 
 			for($X = -1; $X <= 1; ++$X){
 				for($Z = -1; $Z <= 1; ++$Z){
