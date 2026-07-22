@@ -44,6 +44,9 @@ namespace {
 }
 
 namespace pocketmine {
+	//眼不见为净	
+	error_reporting(E_ALL ^ E_DEPRECATED);
+	
 	use pocketmine\utils\Binary;
 	use pocketmine\utils\MainLogger;
 	use pocketmine\utils\ServerKiller;

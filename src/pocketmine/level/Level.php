@@ -2782,7 +2782,7 @@ class Level implements ChunkManager, Metadatable{
 			return false;
 		}
 
-		if(!$this->isChunkLoaded(floor($x), floor($z))){
+		if(!(isset($this->chunks[(\PHP_INT_SIZE === 8 ? ((($x) & 0xFFFFFFFF) << 32) | ((  $z) & 0xFFFFFFFF) : ($x) . ":" . (  $z))]) or $this->provider->isChunkLoaded($x,  $z))){
 			return true;
 		}
 
