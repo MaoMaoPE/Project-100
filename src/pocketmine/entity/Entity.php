@@ -1226,12 +1226,21 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function getDirection(){
-		$y = -sin(deg2rad($this->pitch));
-		$xz = cos(deg2rad($this->pitch));
-		$x = -$xz * sin(deg2rad($this->yaw));
-		$z = $xz * cos(deg2rad($this->yaw));
-
-		return $this->temporalVector->setComponents($x, $y, $z)->normalize();
+		$rotation = fmod(($this->yaw - 90), 360);
+		if($rotation < 0){
+			$rotation += 360.0;
+		}
+		if((0 <= $rotation && $rotation < 45) || (315 <= $rotation && $rotation < 360)){
+			return 2; //North
+		}elseif(45 <= $rotation && $rotation < 135){
+			return 3; //East
+		}elseif(135 <= $rotation && $rotation < 225){
+			return 0; //South
+		}elseif(225 <= $rotation && $rotation < 315){
+			return 1; //West
+		}else{
+			return null;
+		}
 	}
 
 	public function extinguish(){
