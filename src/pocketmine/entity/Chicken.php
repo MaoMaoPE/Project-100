@@ -21,7 +21,6 @@
 
 namespace pocketmine\entity;
 
-use Override;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
@@ -82,10 +81,10 @@ class Chicken extends Animal{
 		return 0;
 	}
 
-	#[Override]
 	public function onUpdate($tick) { //TODO 鸡的AI
 		if (!$this->closed !== false) return false;
 
+		return parent::onUpdate($tick);
 		$hasUpdate = parent::onUpdate($tick);
 
 		if($this->motionX ** 2 + $this->motionZ ** 2 <= $this->moveDirection->lengthSquared()){
