@@ -119,6 +119,12 @@ class Zombie extends Monster{
 			return false;
 		}
 		
+		if($this->isAlive()) {
+			$timeOfDay = abs($this->getLevel()->getTime() % 24000);
+			if(0 < $timeOfDay and $timeOfDay < 13000)
+				 $this->setOnFire(2); //僵尸起火
+		}
+
 		return parent::onUpdate($currentTick); //不行这AI还是太抽象了
 		
 		$this->lastUpdate = $currentTick;

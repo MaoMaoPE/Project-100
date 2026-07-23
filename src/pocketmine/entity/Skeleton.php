@@ -22,6 +22,7 @@
 
 namespace pocketmine\entity;
 
+use Override;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\enchantment\Enchantment;
@@ -72,6 +73,21 @@ class Skeleton extends Monster implements ProjectileSource{
 		$pk->selectedSlot = 0;
 
 		$player->dataPacket($pk);
+	}
+
+	public function onUpdate($tick) {
+		if($this->closed !== false){
+			return false;
+		}
+
+		// 把僵尸的起火代码拿了过来
+		if($this->isAlive()) {
+			$timeOfDay = abs($this->getLevel()->getTime() % 24000);
+			if(0 < $timeOfDay and $timeOfDay < 13000)
+				 $this->setOnFire(2); //僵尸起火
+		}
+
+		return parent::onUpdate($tick);
 	}
 
 	public function getDrops(){
