@@ -45,6 +45,7 @@ class Shulker extends Monster implements Colorable{
 
     public function initEntity(){
 		$this->setMaxHealth(30);
+        $this->setDataProperty(self::DATA_VARIANT, self::DATA_TYPE_INT, 10);
 		parent::initEntity();
 	}
 
