@@ -30,9 +30,8 @@ use pocketmine\Player;
 class Shulker extends Monster implements Colorable{
     const NETWORK_ID = 54;
 
-    public $width = 1.0;
-    public $length = 1.0;
-    public $height = 1.0;
+    public $width = 1;
+    public $height = 1;
 
     public $dropExp = [5, 5];
 

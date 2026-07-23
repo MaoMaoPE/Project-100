@@ -24,9 +24,14 @@ namespace pocketmine\entity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\level\Level;
 use pocketmine\math\Vector3;
+use pocketmine\Server;
 
 abstract class Creature extends Living{
 	public $attackingTick = 0;
+
+	private $minDamage = [0, 0, 0, 0];
+    private $maxDamage = [0, 0, 0, 0];
+
 
 	public function onUpdate($tick){
 		if(!$this instanceof Human){
@@ -66,6 +71,27 @@ abstract class Creature extends Living{
 		parent::entityBaseTick();
 		return parent::onUpdate($tick);
 	}
+
+	/**
+     * @param float|float[] $damage
+     * @param int $difficulty
+     */
+    public function setDamage($damage, int $difficulty = null) {
+        if (is_array($damage)) {
+            for ($i = 0; $i < 4; $i++) {
+                $this->minDamage[$i] = $damage[$i];
+                $this->maxDamage[$i] = $damage[$i];
+            }
+            return;
+        } elseif ($difficulty === null) {
+            $difficulty = Server::getInstance()->getDifficulty();
+        }
+
+        if ($difficulty >= 1 && $difficulty <= 3) {
+            $this->minDamage[$difficulty] = $damage[$difficulty];
+            $this->maxDamage[$difficulty] = $damage[$difficulty];
+        }
+    }
 
 	public function willMove($distance = 36){
 		foreach($this->getViewers() as $viewer){
