@@ -19,12 +19,15 @@ namespace pocketmine\entity;
  * 
 */
 //潜影贝
+
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\level\Level;
-use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\level\sound\EndermanTeleportSound;
+use pocketmine\nbt\tag\{CompoundTag, ByteTag};
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Shulker extends Monster {
+class Shulker extends Monster implements Colorable{
     const NETWORK_ID = 54;
 
     public $width = 1.0;
@@ -38,7 +41,6 @@ class Shulker extends Monster {
     }
 
     public function __construct(Level $level, CompoundTag $nbt) {
-        Entity::createEntity("shulker", $level, $nbt);
         parent::__construct($level, $nbt);
     }
 
@@ -62,5 +64,18 @@ class Shulker extends Monster {
         $player->dataPacket($pk);
 
         parent::spawnTo($player);
+    }
+
+    public function attack($damage, EntityDamageEvent $source): bool {
+        parent::attack($damage, $source);
+    
+        if(!$source->isCancelled()) {
+            if(mt_rand(1, 10) == 1) {
+                $this->level->addSound(new EndermanTeleportSound($this));
+                $this->move(mt_rand(-10, 10), 0, mt_rand(-10, 10));
+            }
+        }
+
+        return true;
     }
 }
