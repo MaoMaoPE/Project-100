@@ -38,6 +38,7 @@ class Shulker extends Monster {
     }
 
     public function __construct(Level $level, CompoundTag $nbt) {
+        Entity::createEntity("shulker", $level, $nbt);
         parent::__construct($level, $nbt);
     }
 
