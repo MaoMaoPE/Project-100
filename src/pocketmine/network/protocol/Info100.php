@@ -67,8 +67,10 @@ interface Info100{
 	const LEVEL_EVENT_PACKET = 0x1b;
 	const BLOCK_EVENT_PACKET = 0x1c;
 	const ENTITY_EVENT_PACKET = 0x1d;
-	const MOB_EFFECT_PACKET = 0x1e;
-	const UPDATE_ATTRIBUTES_PACKET = 0x1f;
+	//const MOB_EFFECT_PACKET = 0x1e; 
+	//const UPDATE_ATTRIBUTES_PACKET = 0x1f;
+	// 被注释掉的这俩是滚木包
+
 	const MOB_EQUIPMENT_PACKET = 0x20;
 	const MOB_ARMOR_EQUIPMENT_PACKET = 0x21;
 	const INTERACT_PACKET = 0x22;
