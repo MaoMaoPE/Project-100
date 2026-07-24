@@ -104,7 +104,7 @@ player:
  save-player-data: true
  anti-cheat:
   #If false, will try to prevent speed and noclip cheats. May cause movement issues with some blocks which are not yet properly implemented.
-  allow-movement-cheats: false
+  allow-movement-cheats: true
   #If false, times block breaks to ensure players are not cheating. May cause issues with some blocks which are not yet properly implemented.
   allow-instabreak: false
 
@@ -185,7 +185,7 @@ commands:
 
 timings:
  #Choose the host to use for viewing your timings results.
- host: mcpetimings.com
+ host: timings.pmmp.io
 
 aliases:
  #Examples:
