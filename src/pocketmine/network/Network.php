@@ -446,7 +446,7 @@ class Network {
 		$this->registerPacket100(Info100::ADVENTURE_SETTINGS_PACKET, AdventureSettingsPacket::class);
 		$this->registerPacket100(Info100::ANIMATE_PACKET, AnimatePacket::class);
 		$this->registerPacket100(Info100::AVAILABLE_COMMANDS_PACKET, AvailableCommandsPacket::class);
-		$this->registerPacket100(Info100::BATCH_PACKET, BatchPacket::class);
+		$this->registerPacket100(Info::BATCH_PACKET, BatchPacket::class);
 		$this->registerPacket100(Info100::BLOCK_ENTITY_DATA_PACKET, BlockEntityDataPacket::class);
 		$this->registerPacket100(Info100::BLOCK_EVENT_PACKET, BlockEventPacket::class);
  		$this->registerPacket100(Info100::BOSS_EVENT_PACKET, BossEventPacket::class);
@@ -474,7 +474,7 @@ class Network {
 		$this->registerPacket100(Info100::ITEM_FRAME_DROP_ITEM_PACKET, ItemFrameDropItemPacket::class);
 		$this->registerPacket100(Info100::LEVEL_EVENT_PACKET, LevelEventPacket::class);
 		$this->registerPacket100(Info100::LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket::class);
-		$this->registerPacket100(Info100::LOGIN_PACKET, LoginPacket::class);
+		$this->registerPacket100(Info::LOGIN_PACKET, LoginPacket::class);
 		$this->registerPacket100(Info100::MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class);
 		$this->registerPacket100(Info100::MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class);
 		$this->registerPacket100(Info100::MOB_EQUIPMENT_PACKET, MobEquipmentPacket::class);
@@ -491,10 +491,10 @@ class Network {
 		$this->registerPacket100(Info100::REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket::class);
 		$this->registerPacket100(Info100::RESOURCE_PACK_CHUNK_REQUEST_PACKET, ResourcePackChunkRequestPacket::class);
 		$this->registerPacket100(Info100::RESOURCE_PACK_CHUNK_DATA_PACKET, ResourcePackChunkDataPacket::class);
-		$this->registerPacket100(Info100::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
+		$this->registerPacket100(Info::RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket::class);
 		$this->registerPacket100(Info100::RESOURCE_PACK_DATA_INFO_PACKET, ResourcePackDataInfoPacket::class);
-		$this->registerPacket100(Info100::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
-		$this->registerPacket100(Info100::RESOURCE_PACK_STACK_PACKET, ResourcePackStackPacket::class);
+		$this->registerPacket100(Info::RESOURCE_PACKS_INFO_PACKET, ResourcePacksInfoPacket::class);
+		$this->registerPacket100(Info::RESOURCE_PACK_STACK_PACKET, ResourcePackStackPacket::class);
 		$this->registerPacket100(Info100::RESPAWN_PACKET, RespawnPacket::class);
 		$this->registerPacket100(Info100::RIDER_JUMP_PACKET, RiderJumpPacket::class);
 		$this->registerPacket100(Info100::SHOW_CREDITS_PACKET, ShowCreditsPacket::class);
@@ -511,7 +511,7 @@ class Network {
 		$this->registerPacket100(Info100::SPAWN_EXPERIENCE_ORB_PACKET, SpawnExperienceOrbPacket::class);
 		$this->registerPacket100(Info100::START_GAME_PACKET, StartGamePacket::class);
 		$this->registerPacket100(Info100::TAKE_ITEM_ENTITY_PACKET, TakeItemEntityPacket::class);
-		$this->registerPacket100(Info100::TEXT_PACKET, TextPacket::class);
+		$this->registerPacket100(Info::TEXT_PACKET, TextPacket::class);
 		$this->registerPacket100(Info100::TRANSFER_PACKET, TransferPacket::class);
 		$this->registerPacket100(Info100::UPDATE_BLOCK_PACKET, UpdateBlockPacket::class);
 		$this->registerPacket100(Info100::UPDATE_TRADE_PACKET, UpdateTradePacket::class);
