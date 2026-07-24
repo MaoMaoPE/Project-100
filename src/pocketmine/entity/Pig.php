@@ -64,12 +64,21 @@ class Pig extends Animal{
 	}
 	
 	public function getDrops(){
-		$lootingL = 0;
 		$cause = $this->lastDamageCause;
-		if($cause instanceof EntityDamageByEntityEvent and $cause->getDamager() instanceof Player){
-			$lootingL = $cause->getDamager()->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+		if($cause instanceof EntityDamageByEntityEvent){
+			$damager = $cause->getDamager();
+			if($damager instanceof Player){
+				$lootingL = $damager->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+                $drops = [];
+                if ($this->isOnFire())
+                    array_push($drops, ItemItem::get(ItemItem::COOKED_PORKCHOP, 0, mt_rand(1, 3 + $lootingL)));
+                else
+                    array_push($drops, ItemItem::get(ItemItem::RAW_PORKCHOP, 0, mt_rand(1,3 + $lootingL)));
+
+				return $drops;
+			}
 		}
-		$drops = array(ItemItem::get(ItemItem::RAW_PORKCHOP, 0, mt_rand(1, 3 + $lootingL)));
-		return $drops;
+
+		return [];
 	}
 }
