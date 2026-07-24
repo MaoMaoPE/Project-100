@@ -1686,7 +1686,7 @@ class Server{
 				unlink($this->dataPath . "lang.txt");
 			}
 			$this->config = new Config($configPath = $this->dataPath . "pocketmine.yml", Config::YAML, []);
-			$nowLang = $this->getProperty("settings.language", $wizardLang);
+			$nowLang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
 
 			//Crashes unsupported builds without the correct configuration
 			if(strpos(\pocketmine\VERSION, "unsupported") !== false and getenv("CI") === false){
