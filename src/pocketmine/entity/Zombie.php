@@ -26,6 +26,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\level\Level;
 use pocketmine\math\Vector3;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
@@ -120,9 +121,15 @@ class Zombie extends Monster{
 		}
 		
 		if($this->isAlive()) {
-			$timeOfDay = abs($this->getLevel()->getTime() % 24000);
-			if(0 < $timeOfDay and $timeOfDay < 13000)
-				 $this->setOnFire(1); //僵尸起火
+			$time = $this->getLevel()->getTime() % Level::TIME_FULL;
+        	$lightLevel = $this->getLevel()->getFullLight(new \pocketmine\math\Vector3($this->x, $this->y + 1, $this->z));
+			if(
+            	!$this->isOnFire()
+            	&& ($time < Level::TIME_NIGHT || ($time > Level::TIME_SUNRISE && $lightLevel >= 12))
+           		&& !$this->getLevel()->getWeather()->isRainy() // 添加天气判断：不是雨天
+        	){
+            	$this->setOnFire(100);
+        	}
 		}
 
 		return parent::onUpdate($currentTick); //不行这AI还是太抽象了
