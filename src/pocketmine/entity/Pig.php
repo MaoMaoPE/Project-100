@@ -22,6 +22,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -43,6 +44,12 @@ class Pig extends Animal{
 	protected function initEntity() {
 		$this->setMaxHealth(10);
 		return parent::initEntity();
+	}
+
+	public function attack($damage, EntityDamageEvent $source) {
+		parent::attack($damage, $source);
+
+		if ($this->isOnFire()) $this->setOnFire(100);
 	}
 	
 	public function spawnTo(Player $player){

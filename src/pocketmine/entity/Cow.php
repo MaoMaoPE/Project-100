@@ -22,6 +22,7 @@
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\network\protocol\AddEntityPacket;
@@ -45,6 +46,12 @@ class Cow extends Animal{
 		return parent::initEntity();
 	}
 	
+	public function attack($damage, EntityDamageEvent $source) {
+		parent::attack($damage, $source);
+
+		if ($this->isOnFire()) $this->setOnFire(100);
+	}
+
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();

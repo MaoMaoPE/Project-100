@@ -23,6 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\block\Wool;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\level\Level;
@@ -86,6 +87,12 @@ class Sheep extends Animal implements Colorable{
 
 	public function setColor(int $color){
 		$this->namedtag->Color = new ByteTag("Color", $color);
+	}
+
+	public function attack($damage, EntityDamageEvent $source) {
+		parent::attack($damage, $source);
+
+		if ($this->isOnFire()) $this->setOnFire(100);
 	}
 	
 	public function spawnTo(Player $player){
