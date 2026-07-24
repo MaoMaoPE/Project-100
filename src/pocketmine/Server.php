@@ -1700,6 +1700,10 @@ class Server{
 				@file_put_contents($configPath, str_replace('language: "' . $nowLang . '"', 'language: "' . $defaultLang . '"', file_get_contents($configPath)));
 				$this->config->reload();
 				unset($this->propertyCache["settings.language"]);
+			}f($defaultLang != "unknown" and $nowLang != $defaultLang){
+				@file_put_contents($configPath, str_replace('language: "' . $nowLang . '"', 'language: "' . $defaultLang . '"', file_get_contents($configPath)));
+				$this->config->reload();
+				unset($this->propertyCache["settings.language"]);
 			}
 
 			$lang = $this->getProperty("settings.language", BaseLang::FALLBACK_LANGUAGE);
