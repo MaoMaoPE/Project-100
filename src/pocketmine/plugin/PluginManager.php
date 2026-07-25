@@ -279,9 +279,7 @@ class PluginManager{
 							if($compatible === false){
 							 	if($this->server->loadIncompatibleAPI === true){
 			     					//$this->server->getLogger()->debug("插件{$name}的API与服务器不符,但GenisysGT仍然加载了它");
-									$this->server->getLogger()->debug(new TranslationContainer("pocketmine.plugin.debug.api", [
-										$name,
-									]));
+									$this->server->getLogger()->debug(new TranslationContainer("pocketmine.plugin.debug.api", [$name]));
 			    				}else{
 			     					$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
 								 	continue;
