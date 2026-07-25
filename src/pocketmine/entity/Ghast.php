@@ -37,6 +37,7 @@ class Ghast extends FlyingAnimal{
 
 	public function initEntity(){
 		$this->setMaxHealth(10);
+		$this->setHealth(10);
 		parent::initEntity();
 	}
 	

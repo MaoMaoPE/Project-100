@@ -35,6 +35,7 @@ class Witch extends Monster{
 	
 	public function initEntity(){
 		$this->setMaxHealth(26);
+		$this->setHealth(26);
 		parent::initEntity();
 	}
 	

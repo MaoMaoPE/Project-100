@@ -42,6 +42,7 @@ class Enderman extends Monster{
 
 	public function initEntity(){
 		$this->setMaxHealth(40);
+		$this->setHealth(40);
 		parent::initEntity();
 
 		//$this->setDamage([0, 4, 7, 10]);

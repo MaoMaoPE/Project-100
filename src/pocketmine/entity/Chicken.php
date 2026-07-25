@@ -54,7 +54,8 @@ class Chicken extends Animal{
 
 	protected function initEntity() {
 		$this->setMaxHealth(4);
-		return parent::initEntity();
+		$this->setHealth(4);
+		parent::initEntity();
 	}
 	
 	public function spawnTo(Player $player){

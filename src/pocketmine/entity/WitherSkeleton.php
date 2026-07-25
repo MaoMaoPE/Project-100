@@ -41,6 +41,7 @@ class WitherSkeleton extends Monster implements ProjectileSource {
 
     public function initEntity(){
 		$this->setMaxHealth(20);
+		$this->setHealth(20);
 		parent::initEntity();
 	}
 

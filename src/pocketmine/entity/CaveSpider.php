@@ -42,7 +42,8 @@ class CaveSpider extends Monster{
 
 	protected function initEntity() {
 		$this->setMaxHealth(16);
-		return parent::initEntity();
+		$this->setHealth(16);
+		parent::initEntity();
 	}
 	
 	public function spawnTo(Player $player){

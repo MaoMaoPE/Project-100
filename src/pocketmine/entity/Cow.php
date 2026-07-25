@@ -43,7 +43,8 @@ class Cow extends Animal{
 
 	protected function initEntity() {
 		$this->setMaxHealth(10);
-		return parent::initEntity();
+		$this->setHealth(10);
+		parent::initEntity();
 	}
 	
 	public function attack($damage, EntityDamageEvent $source) {

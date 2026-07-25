@@ -49,7 +49,8 @@ class Sheep extends Animal implements Colorable{
 
 	protected function initEntity() {
 		$this->setMaxHealth(8);
-		return parent::initEntity();
+		$this->setHealth(8);
+	 	parent::initEntity();
 	}
 
 	public function __construct(Level $level, CompoundTag $nbt){

@@ -22,7 +22,10 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item as ItemItem;
+use pocketmine\level\Level;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\MobEquipmentPacket;
 use pocketmine\Player;
@@ -35,6 +38,8 @@ class Stray extends Skeleton{
 	public function getName() : string{
 		return "Stray";
 	}
+
+
 	
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
@@ -60,5 +65,42 @@ class Stray extends Skeleton{
 		$pk->selectedSlot = 0;
 
 		$player->dataPacket($pk);
+	}
+
+	public function onUpdate($tick) {
+		if($this->closed !== false){
+			return false;
+		}
+
+		// 把僵尸的起火代码拿了过来
+		if($this->isAlive()) {
+			$time = $this->getLevel()->getTime() % Level::TIME_FULL;
+        	$lightLevel = $this->getLevel()->getFullLight(new \pocketmine\math\Vector3($this->x, $this->y + 1, $this->z));
+			if(
+            	!$this->isOnFire()
+            	&& ($time < Level::TIME_NIGHT || ($time > Level::TIME_SUNRISE && $lightLevel >= 12))
+           		&& !$this->getLevel()->getWeather()->isRainy() // 添加天气判断：不是雨天
+        	){
+            	$this->setOnFire(100);
+        	}
+		}
+
+		return parent::onUpdate($tick);
+	}
+
+	public function getDrops(){
+		$cause = $this->lastDamageCause;
+		if($cause instanceof EntityDamageByEntityEvent){
+			$damager = $cause->getDamager();
+			if($damager instanceof Player){
+				$lootingL = $damager->getItemInHand()->getEnchantmentLevel(Enchantment::TYPE_WEAPON_LOOTING);
+				$drops = [ItemItem::get(ItemItem::ARROW, 0, mt_rand(0, 2 + $lootingL))];
+				$drops[] = ItemItem::get(ItemItem::BONE, 0, mt_rand(0, 2 + $lootingL));
+
+				return $drops;
+			}
+		}
+
+		return [];
 	}
 }

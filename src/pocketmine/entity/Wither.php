@@ -43,6 +43,7 @@ class Wither extends FlyingAnimal{
 
 	public function initEntity(){
 		$this->setMaxHealth(300);
+		$this->setHealth(300);
 		parent::initEntity();
 	}
 	

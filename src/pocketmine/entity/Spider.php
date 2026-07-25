@@ -41,6 +41,7 @@ class Spider extends Monster{
 
 	protected function initEntity() {
 		$this->setMaxHealth(16);
+		$this->setHealth(16);
 		return parent::initEntity();
 	}
 

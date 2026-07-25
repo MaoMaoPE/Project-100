@@ -34,6 +34,7 @@ class IronGolem extends Animal{
 	
 	public function initEntity(){
 		$this->setMaxHealth(100);
+		$this->setHealth(100);
 		parent::initEntity();
 	}
 	

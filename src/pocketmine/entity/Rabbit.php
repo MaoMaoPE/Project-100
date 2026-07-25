@@ -53,6 +53,7 @@ class Rabbit extends Animal{
 
 	public function initEntity(){
 		$this->setMaxHealth(3);
+		$this->setHeight(3);
 		parent::initEntity();
 	}
 

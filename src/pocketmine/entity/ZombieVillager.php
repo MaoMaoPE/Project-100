@@ -33,6 +33,7 @@ class ZombieVillager extends Zombie{
 
 	public function initEntity(){
 		$this->setMaxHealth(20);
+		$this->setHealth(20);
 		parent::initEntity();
 	}
 
