@@ -26,6 +26,7 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use function count;
 
 class PingCommand extends VanillaCommand{
 
@@ -44,7 +45,32 @@ class PingCommand extends VanillaCommand{
 			return true;
 		}
 
-		$sender->sendMessage("Ping: ". $sender->getPing() ."ms");
+		$target = null;
+
+		if(count($args) === 1){
+			$target = $sender->getServer()->getPlayer($args[0]);
+		}
+
+		if($target == null){
+			if($sender instanceof Player){
+				$target = $sender;
+			}else{
+				$sender->sendMessage(TextFormat::RED . "Please provide a player!");
+
+				return true;
+			}
+		}
+
+		$ping = $target->getPing();
+		$color = TextFormat::GREEN;
+
+		if($ping >= 150 && $ping <= 250){
+			$color = TextFormat::GOLD;
+		}elseif($ping > 250){
+			$color = TextFormat::RED;
+		}
+
+		$sender->sendMessage($target->getName() . "'s Ping: " . $color . $ping . "ms");
 		return true;
 	}
 }
