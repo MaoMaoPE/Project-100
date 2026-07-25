@@ -21,6 +21,7 @@
 
 namespace pocketmine\entity;
 
+use pocketmine\level\Level;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\Player;
 
@@ -39,6 +40,26 @@ class ZombieVillager extends Zombie{
 
 	public function getName() : string{
 		return "Zombie Villager";
+	}
+
+	public function onUpdate($tick) {
+		if($this->closed !== false){
+			return false;
+		}
+
+		// 把僵尸的起火代码拿了过来
+		if($this->isAlive()) {
+			$time = $this->getLevel() !== null ? $this->getLevel()->getTime() % Level::TIME_FULL : Level::TIME_NIGHT;
+			if(
+				!$this->isOnFire()
+				&& ($time < Level::TIME_NIGHT || $time > Level::TIME_SUNRISE)
+            	&& !$this->getLevel()->getWeather()->isRainy()
+			){
+				$this->setOnFire(100);
+			}
+		}
+
+		return parent::onUpdate($tick);
 	}
 
 	public function spawnTo(Player $player){

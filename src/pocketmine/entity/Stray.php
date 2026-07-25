@@ -74,15 +74,14 @@ class Stray extends Skeleton{
 
 		// 把僵尸的起火代码拿了过来
 		if($this->isAlive()) {
-			$time = $this->getLevel()->getTime() % Level::TIME_FULL;
-        	$lightLevel = $this->getLevel()->getFullLight(new \pocketmine\math\Vector3($this->x, $this->y + 1, $this->z));
+			$time = $this->getLevel() !== null ? $this->getLevel()->getTime() % Level::TIME_FULL : Level::TIME_NIGHT;
 			if(
-            	!$this->isOnFire()
-            	&& ($time < Level::TIME_NIGHT || ($time > Level::TIME_SUNRISE && $lightLevel >= 12))
-           		&& !$this->getLevel()->getWeather()->isRainy() // 添加天气判断：不是雨天
-        	){
-            	$this->setOnFire(100);
-        	}
+				!$this->isOnFire()
+				&& ($time < Level::TIME_NIGHT || $time > Level::TIME_SUNRISE)
+            	&& !$this->getLevel()->getWeather()->isRainy()
+			){
+				$this->setOnFire(100);
+			}
 		}
 
 		return parent::onUpdate($tick);
