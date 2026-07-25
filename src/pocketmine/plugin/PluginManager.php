@@ -35,6 +35,7 @@ use pocketmine\command\PluginCommand;
 use pocketmine\command\SimpleCommandMap;
 use pocketmine\event\Event;
 use pocketmine\event\EventPriority;
+use pocketmine\event\Listener;
 use pocketmine\event\HandlerList;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
