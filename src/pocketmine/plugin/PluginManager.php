@@ -36,9 +36,9 @@ use pocketmine\command\SimpleCommandMap;
 use pocketmine\event\Event;
 use pocketmine\event\EventPriority;
 use pocketmine\event\HandlerList;
-use pocketmine\event\Listener;
 use pocketmine\event\Timings;
 use pocketmine\event\TimingsHandler;
+use pocketmine\event\TranslationContainer;
 use pocketmine\permission\Permissible;
 use pocketmine\permission\Permission;
 use pocketmine\Server;
@@ -276,12 +276,15 @@ class PluginManager{
 							}
 
 							if($compatible === false){
-							 if($this->server->loadIncompatibleAPI === true){
-			     $this->server->getLogger()->debug("插件{$name}的API与服务器不符,但GenisysPro仍然加载了它");
-			    }else{
-			     $this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
-								 continue;
-			    }
+							 	if($this->server->loadIncompatibleAPI === true){
+			     					//$this->server->getLogger()->debug("插件{$name}的API与服务器不符,但GenisysGT仍然加载了它");
+									$this->server->getLogger()->debug(new TranslationContainer("pocketmine.plugin.debug.api", [
+										$name,
+									]));
+			    				}else{
+			     					$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
+								 	continue;
+			    				}
 							}
 
 							if($compatiblegeniapi === false){
