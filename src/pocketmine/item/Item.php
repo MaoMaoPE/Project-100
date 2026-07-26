@@ -343,7 +343,7 @@ class Item implements ItemIds, \JsonSerializable{
 			}else{
 				return (new $class($meta, $count))->setCompoundTag($tags);
 			}
-		}catch(\RuntimeException $e){
+		}catch(\RuntimeException){
 			return (new Item($id, $meta, $count))->setCompoundTag($tags);
 		}
 	}
