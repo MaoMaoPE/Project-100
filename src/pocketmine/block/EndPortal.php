@@ -76,7 +76,7 @@ class EndPortal extends Transparent{
 		$endpor = $entity->getLevel()->getBlock($entity->floor());
 		if ($endpor->getId() === self::END_PORTAL) {
 			if ($entity->getLevel()->getName() === $server->getProperty("level-name")) {
-				$entity->teleport(new Position(0, 70, 0, $server->getLevelByName($server->enderName)));
+				$entity->teleport(new Position(0, 70, 0, $server->getAdvancedProperty("ender.allow-ender")));
 			} else if ($entity->getLevel()->getName() === $server->getAdvancedProperty("ender.allow-ender")) {
 				$entity->teleport($server->getDefaultLevel()->getSafeSpawn());
 			}
