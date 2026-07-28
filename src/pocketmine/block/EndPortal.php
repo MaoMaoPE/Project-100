@@ -27,6 +27,7 @@ namespace pocketmine\block;
 use Generator;
 use pocketmine\entity\Entity;
 use pocketmine\item\Item;
+use pocketmine\level\Position;
 use pocketmine\network\mcpe\protocol\types\DimensionIds;
 use pocketmine\Player;
 use pocketmine\Server;
@@ -65,12 +66,20 @@ class EndPortal extends Transparent{
 
 	public function onEntityCollide(Entity $entity) : void{
 		$server = Server::getInstance();
-		if($entity->getLevel()->getDimension() === 2){
+		/*if($entity->getLevel()->getDimension() === 2){
 			$entity->teleport(Server::getInstance()->getDefaultLevel()->getSafeSpawn());
 			//$entity->travelToDimension(0);
 		}elseif ($entity->getLevel()->getDimension() === 0){
 			$entity->teleport(Server::getInstance()->getEnderLevel()->getSafeSpawn());
 			//$entity->travelToDimension(2);
+		}*/
+		$endpor = $entity->getLevel()->getBlock($entity->floor());
+		if ($endpor->getId() === self::END_PORTAL) {
+			if ($entity->getLevel()->getName() === $server->getProperty("level-name")) {
+				$entity->teleport(new Position(0, 70, 0, $server->getLevelByName($server->enderName)));
+			} else if ($entity->getLevel()->getName() === $server->getAdvancedProperty("ender.allow-ender")) {
+				$entity->teleport($server->getDefaultLevel()->getSafeSpawn());
+			}
 		}
 	}
 
