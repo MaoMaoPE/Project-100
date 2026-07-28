@@ -56,7 +56,7 @@ class ServerHandler{
 		$this->server->pushMainToThreadPacket($buffer);
 	}
 
-	public function unblockAddress($address){
+	public function unblockAddress(string $address){
 		$buffer = chr(RakLib::PACKET_UNBLOCK_ADDRESS) . chr(strlen($address)) . $address;
 		$this->server->pushMainToThreadPacket($buffer);
 	}
@@ -65,11 +65,9 @@ class ServerHandler{
 		$buffer = chr(RakLib::PACKET_SHUTDOWN);
 		$this->server->pushMainToThreadPacket($buffer);
 		$this->server->shutdown();
-		$this->server->synchronized(function(){
-			if($this->server !== null){
-				$this->server->wait(20000);
-			}
-		});
+		$this->server->synchronized(function(RakLibServer $server){
+			$server->wait(20000);
+		}, $this->server);
 		$this->server->join();
 	}
 
@@ -87,8 +85,7 @@ class ServerHandler{
 	 * @return bool
 	 */
 	public function handlePacket(){
-		$packet = $this->server->readThreadToMainPacket();
-		if($packet != null && strlen($packet) > 0){
+		if(strlen($packet = $this->server->readThreadToMainPacket()) > 0){
 			$id = ord($packet[0]);
 			$offset = 1;
 			if($id === RakLib::PACKET_ENCAPSULATED){
@@ -130,13 +127,6 @@ class ServerHandler{
 				$len = ord($packet[$offset++]);
 				$reason = substr($packet, $offset, $len);
 				$this->instance->closeSession($identifier, $reason);
-			}elseif($id === RakLib::PACKET_PING){
-				$len = ord($packet[$offset++]);
-				$identifier = substr($packet, $offset, $len);
-				$offset += $len;
-				$len = ord($packet[$offset++]);
-				$ping = substr($packet, $offset, $len);
-				$this->instance->handlePing($identifier, $ping);
 			}elseif($id === RakLib::PACKET_INVALID_SESSION){
 				$len = ord($packet[$offset++]);
 				$identifier = substr($packet, $offset, $len);
@@ -147,11 +137,18 @@ class ServerHandler{
 				$offset += $len;
 				$identifierACK = Binary::readInt(substr($packet, $offset, 4));
 				$this->instance->notifyACK($identifier, $identifierACK);
+			}elseif($id === RakLib::PACKET_PING){
+				$len = ord($packet[$offset++]);
+				$identifier = substr($packet, $offset, $len);
+				$offset += $len;
+				$len = ord($packet[$offset++]);
+				$ping = substr($packet, $offset, $len);
+				$this->instance->handlePing($identifier, $ping);
+
+				return true;
 			}
 
-			return true;
+			return false;
 		}
-
-		return false;
 	}
 }
