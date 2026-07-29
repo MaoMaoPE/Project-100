@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * RakLib network library
- *
+ *  ___	  _   _	_ _
+ * | _ \__ _| |_| |  (_) |__
+ * |   / _` | / / |__| | '_ \
+ * |_|_\__,_|_\_\____|_|_.__/
  *
  * This project is not affiliated with Jenkins Software LLC nor RakNet.
  *
@@ -11,34 +15,53 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
+ * @author Glowstone (iNotFlying)
+ * @link vk.com/inotflying
+ *
  */
 
 namespace raklib\server;
 
-class UDPServerSocket{
+use function socket_bind;
+use function socket_close;
+use function socket_create;
+use function socket_recvfrom;
+use function socket_sendto;
+use function socket_set_nonblock;
+use function socket_set_option;
+use function strlen;
+use const AF_INET;
+use const SO_RCVBUF;
+use const SO_REUSEADDR;
+use const SO_SNDBUF;
+use const SOCK_DGRAM;
+use const SOL_SOCKET;
+use const SOL_UDP;
+
+class UDPServerSocket {
 	/** @var \Logger */
 	protected $logger;
 	protected $socket;
 
-	public function __construct(\ThreadedLogger $logger, $port = 19132, $interface = "0.0.0.0"){
+	public function __construct(\ThreadedLogger $logger, $port = 19132, $interface = "0.0.0.0") {
 		$this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-		//socket_set_option($this->socket, SOL_SOCKET, SO_BROADCAST, 1); //Allow sending broadcast messages
-		if(@socket_bind($this->socket, $interface, $port) === true){
+		// socket_set_option($this->socket, SOL_SOCKET, SO_BROADCAST, 1); // Allow sending broadcast messages
+		if (@socket_bind($this->socket, $interface, $port) === true) {
 			socket_set_option($this->socket, SOL_SOCKET, SO_REUSEADDR, 0);
 			$this->setSendBuffer(1024 * 1024 * 8)->setRecvBuffer(1024 * 1024 * 8);
-		}else{
-			$logger->critical("**** FAILED TO BIND TO " . $interface . ":" . $port . "!");
-			$logger->critical("Perhaps a server is already running on that port?");
+		} else {
+			$logger->critical("**** 无法绑定到端口 " . $interface . ":" . $port . "!", true, true, 0);
+			$logger->critical("可能有服务器已经在该端口上运行？", true, true, 0);
 			exit(1);
 		}
 		socket_set_nonblock($this->socket);
 	}
 
-	public function getSocket(){
+	public function getSocket() {
 		return $this->socket;
 	}
 
-	public function close(){
+	public function close() {
 		socket_close($this->socket);
 	}
 
@@ -49,7 +72,7 @@ class UDPServerSocket{
 	 *
 	 * @return int
 	 */
-	public function readPacket(&$buffer, &$source, &$port){
+	public function readPacket(&$buffer, &$source, &$port) {
 		return socket_recvfrom($this->socket, $buffer, 65535, 0, $source, $port);
 	}
 
@@ -60,7 +83,7 @@ class UDPServerSocket{
 	 *
 	 * @return int
 	 */
-	public function writePacket($buffer, $dest, $port){
+	public function writePacket($buffer, $dest, $port) {
 		return socket_sendto($this->socket, $buffer, strlen($buffer), 0, $dest, $port);
 	}
 
@@ -69,7 +92,7 @@ class UDPServerSocket{
 	 *
 	 * @return $this
 	 */
-	public function setSendBuffer($size){
+	public function setSendBuffer($size) {
 		@socket_set_option($this->socket, SOL_SOCKET, SO_SNDBUF, $size);
 
 		return $this;
@@ -80,10 +103,9 @@ class UDPServerSocket{
 	 *
 	 * @return $this
 	 */
-	public function setRecvBuffer($size){
+	public function setRecvBuffer($size) {
 		@socket_set_option($this->socket, SOL_SOCKET, SO_RCVBUF, $size);
 
 		return $this;
 	}
-
 }

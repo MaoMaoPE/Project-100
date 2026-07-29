@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * RakLib network library
- *
+ *  ___	  _   _	_ _
+ * | _ \__ _| |_| |  (_) |__
+ * |   / _` | / / |__| | '_ \
+ * |_|_\__,_|_\_\____|_|_.__/
  *
  * This project is not affiliated with Jenkins Software LLC nor RakNet.
  *
@@ -11,19 +15,25 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
+ * @author Glowstone (iNotFlying)
+ * @link vk.com/inotflying
+ *
  */
 
 namespace raklib\protocol;
 
 #ifndef COMPILE
 use raklib\Binary;
-
+use function ceil;
+use function chr;
+use function ord;
+use function strlen;
+use function substr;
 #endif
 
 #include <rules/RakLibPacket.h>
 
-class EncapsulatedPacket{
-
+class EncapsulatedPacket implements \Stringable {
 	public $reliability;
 	public $hasSplit = false;
 	public $length = 0;
@@ -44,37 +54,55 @@ class EncapsulatedPacket{
 	 *
 	 * @return EncapsulatedPacket
 	 */
-	public static function fromBinary($binary, $internal = false, &$offset = null){
-
+	public static function fromBinary($binary, $internal = false, &$offset = null) {
 		$packet = new EncapsulatedPacket();
 
-		$flags = ord($binary[0]);
+		$flags = ord($binary [
+			0
+		]);
 		$packet->reliability = $reliability = ($flags & 0b11100000) >> 5;
 		$packet->hasSplit = $hasSplit = ($flags & 0b00010000) > 0;
-		if($internal){
+		if ($internal) {
 			$length = Binary::readInt(substr($binary, 1, 4));
 			$packet->identifierACK = Binary::readInt(substr($binary, 5, 4));
 			$offset = 9;
-		}else{
+		} else {
 			$length = (int) ceil(Binary::readShort(substr($binary, 1, 2)) / 8);
 			$offset = 3;
 			$packet->identifierACK = null;
 		}
 
-		if($reliability > PacketReliability::UNRELIABLE){
-			if($reliability >= PacketReliability::RELIABLE and $reliability !== PacketReliability::UNRELIABLE_WITH_ACK_RECEIPT){
+		/*
+		 * From http://www.jenkinssoftware.com/raknet/manual/reliabilitytypes.html
+		 *
+		 * Default: 0b010 (2) or 0b011 (3)
+		 *
+		 * 0: UNRELIABLE
+		 * 1: UNRELIABLE_SEQUENCED
+		 * 2: RELIABLE
+		 * 3: RELIABLE_ORDERED
+		 * 4: RELIABLE_SEQUENCED
+		 * 5: UNRELIABLE_WITH_ACK_RECEIPT
+		 * 6: RELIABLE_WITH_ACK_RECEIPT
+		 * 7: RELIABLE_ORDERED_WITH_ACK_RECEIPT
+		 */
+
+		if ($reliability > 0) {
+			if ($reliability >= 2 && $reliability !== 5) {
 				$packet->messageIndex = Binary::readLTriad(substr($binary, $offset, 3));
 				$offset += 3;
 			}
 
-			if($reliability <= PacketReliability::RELIABLE_SEQUENCED and $reliability !== PacketReliability::RELIABLE){
+			if ($reliability <= 4 && $reliability !== 2) {
 				$packet->orderIndex = Binary::readLTriad(substr($binary, $offset, 3));
 				$offset += 3;
-				$packet->orderChannel = ord($binary[$offset++]);
+				$packet->orderChannel = ord($binary [
+					$offset++
+				]);
 			}
 		}
 
-		if($hasSplit){
+		if ($hasSplit) {
 			$packet->splitCount = Binary::readInt(substr($binary, $offset, 4));
 			$offset += 4;
 			$packet->splitID = Binary::readShort(substr($binary, $offset, 2));
@@ -89,7 +117,7 @@ class EncapsulatedPacket{
 		return $packet;
 	}
 
-	public function getTotalLength(){
+	public function getTotalLength() {
 		return 3 + strlen($this->buffer) + ($this->messageIndex !== null ? 3 : 0) + ($this->orderIndex !== null ? 4 : 0) + ($this->hasSplit ? 10 : 0);
 	}
 
@@ -98,20 +126,20 @@ class EncapsulatedPacket{
 	 *
 	 * @return string
 	 */
-	public function toBinary($internal = false){
+	public function toBinary($internal = false) {
 		return
-			chr(($this->reliability << 5) | ($this->hasSplit ? 0b00010000 : 0)) .
-			($internal ? Binary::writeInt(strlen($this->buffer)) . Binary::writeInt($this->identifierACK) : Binary::writeShort(strlen($this->buffer) << 3)) .
-			($this->reliability > PacketReliability::UNRELIABLE ?
-				(($this->reliability >= PacketReliability::RELIABLE and $this->reliability !== PacketReliability::UNRELIABLE_WITH_ACK_RECEIPT) ? Binary::writeLTriad($this->messageIndex) : "") .
-				(($this->reliability <= PacketReliability::RELIABLE_SEQUENCED and $this->reliability !== PacketReliability::RELIABLE) ? Binary::writeLTriad($this->orderIndex) . chr($this->orderChannel) : "")
-				: ""
-			) .
-			($this->hasSplit ? Binary::writeInt($this->splitCount) . Binary::writeShort($this->splitID) . Binary::writeInt($this->splitIndex) : "")
-			. $this->buffer;
+		chr(($this->reliability << 5) | ($this->hasSplit ? 0b00010000 : 0)) .
+		($internal ? Binary::writeInt(strlen($this->buffer)) . Binary::writeInt($this->identifierACK) : Binary::writeShort(strlen($this->buffer) << 3)) .
+		($this->reliability > 0 ?
+			(($this->reliability >= 2 && $this->reliability !== 5) ? Binary::writeLTriad($this->messageIndex) : "") .
+			(($this->reliability <= 4 && $this->reliability !== 2) ? Binary::writeLTriad($this->orderIndex) . chr($this->orderChannel) : "")
+			: ""
+		) .
+		($this->hasSplit ? Binary::writeInt($this->splitCount) . Binary::writeShort($this->splitID) . Binary::writeInt($this->splitIndex) : "")
+		. $this->buffer;
 	}
 
-	public function __toString(){
+	public function __toString() : string {
 		return $this->toBinary();
 	}
 }

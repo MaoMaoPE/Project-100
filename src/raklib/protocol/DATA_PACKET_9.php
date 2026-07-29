@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * RakLib network library
- *
+ *  ___	  _   _	_ _
+ * | _ \__ _| |_| |  (_) |__
+ * |   / _` | / / |__| | '_ \
+ * |_|_\__,_|_\_\____|_|_.__/
  *
  * This project is not affiliated with Jenkins Software LLC nor RakNet.
  *
@@ -11,11 +15,13 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
+ * @author Glowstone (iNotFlying)
+ * @link vk.com/inotflying
+ *
  */
 
 namespace raklib\protocol;
 
-
-class DATA_PACKET_9 extends DataPacket{
+class DATA_PACKET_9 extends DataPacket {
 	public static $ID = 0x89;
 }

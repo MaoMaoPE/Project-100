@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /*
- * RakLib network library
- *
+ *  ___	  _   _	_ _
+ * | _ \__ _| |_| |  (_) |__
+ * |   / _` | / / |__| | '_ \
+ * |_|_\__,_|_\_\____|_|_.__/
  *
  * This project is not affiliated with Jenkins Software LLC nor RakNet.
  *
@@ -11,32 +15,37 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
+ * @author Glowstone (iNotFlying)
+ * @link vk.com/inotflying
+ *
  */
 
 namespace raklib\protocol;
 
 #include <rules/RakLibPacket.h>
 
-class UNCONNECTED_PONG extends OfflineMessage{
+use raklib\RakLib;
+
+class UNCONNECTED_PONG extends Packet {
 	public static $ID = 0x1c;
 
 	public $pingID;
 	public $serverID;
 	public $serverName;
 
-	public function encode(){
+	public function encode() {
 		parent::encode();
 		$this->putLong($this->pingID);
 		$this->putLong($this->serverID);
-		$this->writeMagic();
+		$this->put(RakLib::MAGIC);
 		$this->putString($this->serverName);
 	}
 
-	public function decode(){
+	public function decode() {
 		parent::decode();
 		$this->pingID = $this->getLong();
 		$this->serverID = $this->getLong();
-		$this->readMagic();
+		$this->offset += 16; // magic
 		$this->serverName = $this->getString();
 	}
 }
