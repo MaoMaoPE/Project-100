@@ -2,22 +2,22 @@
 
 /*
  * 
- *  ____                     _                 _             _    ___     ___  
- * |  _ \   _ __    ___     (_)   ___    ___  | |_          / |  / _ \   / _ \ 
- * | |_) | | '__|  / _ \    | |  / _ \  / __| | __|  _____  | | | | | | | | | |
- * |  __/  | |    | (_) |   | | |  __/ | (__  | |_  |_____| | | | |_| | | |_| |
- * |_|     |_|     \___/   _/ |  \___|  \___|  \__|         |_|  \___/   \___/ 
- *                        |__/                                                 
+ *  ____                          _       _                
+ * / ___|   _   _   _ __    ___  | |__   (_)  _ __     ___ 
+ * \___ \  | | | | | '_ \  / __| | '_ \  | | | '_ \   / _ \
+ *  ___) | | |_| | | | | | \__ \ | | | | | | | | | | |  __/
+ * |____/   \__,_| |_| |_| |___/ |_| |_| |_| |_| |_|  \___|
+ *                                                               
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * @author MaoMaoPE Team
- * @link https://github.com/MaoMaoPE/Project-100
+ * @link https://github.com/MaoMaoPE/Sunshine
  *
  * 
- */
+*/
 
 /**
  * Minecraft: PE multiplayer protocol implementation
@@ -31,21 +31,26 @@ interface Info{
 	 * Actual Minecraft: PE protocol version
 	 */
 	public const CURRENT_PROTOCOL = 107;
-	public const ACCEPTED_PROTOCOLS = [91,100,101,102,105,106,107/*,113*/]; // 1.0.0 -> 1.1.0 的Protocol, 1.1.0的协议等待适配
+	public const ACCEPTED_PROTOCOLS = [91, 100, 101, 102, 105, 106, 107];
+
 	/**
 	 * @doc
-	 * by XinYue Neko(NewmoomCat)
-	 * 1.0.0至1.0.2 -> 100
-	 * 1.0.3 -> 101
-	 * 1.0.4 -> 102
-	 * 1.0.5 -> 105
+	 * by XinYue Neko(NewmoomCat) & DreamRalsei
+	 * 0.16.0 至 0.17.0.2 -> 91
+	 * 1.0.0.0 至 1.0.0.1 -> 92
+	 * 1.0.0.2 至 1.0.2 -> 100
+	 * 1.0.3.0 至 1.0.4.0 -> 101
+	 * 1.0.4.1 至 1.0.4 -> 102
+	 * 1.0.5.0 至 1.0.6.0 -> 105
 	 * 1.0.6 -> 106
 	 * 1.0.7 至 1.0.9 -> 107
-	 * 1.1.0 至 1.1.7 -> 113
 	 * 以上协议均对应正式版版本号
 	 */
-	public const MINECRAFT_VERSION = ["0.16.0","v1.0.0","v1.0.3","v1.0.4","v1.0.5","v1.0.6","v1.0.7"/*,"1.1.0"*/];
-	public const MINECRAFT_VERSION_NETWORK = "1.0.0";
+	public const MINECRAFT_VERSION = ["v0.16.0", "v1.0.0", "v1.0.3", "v1.0.4", "v1.0.5", "v1.0.6", "v1.0.7"];
+	public const MINECRAFT_VERSION_NETWORK = "1.0";
+
+    public const ACCEPTED_PROTOCOLS_LESS_102 = [91, 100, 101, 102];
+    public const ACCEPTED_PROTOCOLS_LESS_92 = [91];
 
 	public const LOGIN_PACKET = 0x01;
 	public const PLAY_STATUS_PACKET = 0x02;

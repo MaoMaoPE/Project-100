@@ -1,24 +1,23 @@
 <?php
 
 /*
- *               _ _
- *         /\   | | |
- *        /  \  | | |_ __ _ _   _
- *       / /\ \ | | __/ _` | | | |
- *      / ____ \| | || (_| | |_| |
- *     /_/    \_|_|\__\__,_|\__, |
- *                           __/ |
- *                          |___/
- *
+ * 
+ *  ____                          _       _                
+ * / ___|   _   _   _ __    ___  | |__   (_)  _ __     ___ 
+ * \___ \  | | | | | '_ \  / __| | '_ \  | | | '_ \   / _ \
+ *  ___) | | |_| | | | | | \__ \ | | | | | | | | | | |  __/
+ * |____/   \__,_| |_| |_| |___/ |_| |_| |_| |_| |_|  \___|
+ *                                                               
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author TuranicTeam
- * @link https://github.com/TuranicTeam/Altay
+ * @author MaoMaoPE Team
+ * @link https://github.com/MaoMaoPE/Sunshine
  *
- */
+ * 
+*/
 
 declare(strict_types=1);
 

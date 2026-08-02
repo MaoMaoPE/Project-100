@@ -1,23 +1,24 @@
 <?php
 
-/* 
- *  ____                  _                        ____   _____ 
- * / ___|   ___   _ __   (_)  ___   _   _   ___   / ___| |_   _|
- * | |  _   / _ \ | '_ \  | | / __| | | | | / __| | |  _    | |  
- * | |_| | |  __/ | | | | | | \__ \ | |_| | \__ \ | |_| |   | |  
- *  \____|  \___| |_| |_| |_| |___/  \__, | |___/  \____|   |_|  
- *  								 |___/                       
- *
+/*
+ * 
+ *  ____                          _       _                
+ * / ___|   _   _   _ __    ___  | |__   (_)  _ __     ___ 
+ * \___ \  | | | | | '_ \  / __| | '_ \  | | | '_ \   / _ \
+ *  ___) | | |_| | | | | | \__ \ | | | | | | | | | | |  __/
+ * |____/   \__,_| |_| |_| |___/ |_| |_| |_| |_| |_|  \___|
+ *                                                               
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author GenisysGT
- * @link https://github.com/MaoMaoPE/Project-100
+ * @author MaoMaoPE Team
+ * @link https://github.com/MaoMaoPE/Sunshine
  *
- * 注:部分代码是基于Glowstone核心
+ * 
 */
+
 namespace pocketmine\command\defaults;
 
 use pocketmine\command\Command;
