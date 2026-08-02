@@ -1,7 +1,7 @@
 Sunshine (GenisysGT)
 ===================
 
-一个 Minecraft：PE 1.0.0 -> 1.0.9 的互通服务端
+一个 Minecraft：PE 0.16.0 -> 1.0.9 的互通服务端
 
 启动此核心需要[PHP 8.0](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.0-latest)
 
@@ -20,8 +20,9 @@ Sunshine (GenisysGT)
 		放不了眼睛，
 		放置末影之眼退出重进后消失,
 		无法激活并传送	
-
-	...
+		...
+4. 0.16的崩溃问题等
+	
 
 许可协议
 -------------
