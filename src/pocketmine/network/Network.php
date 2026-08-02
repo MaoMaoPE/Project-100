@@ -123,6 +123,7 @@ class Network {
 	/** @var \SplFixedArray */
 	private $packetPool = [];
 	private $packetPool100 = [];
+	private $packetPool91 = []; //更多版本测试
 
 	/** @var Server */
 	private $server;
@@ -241,6 +242,10 @@ class Network {
 
 	public function registerPacket100($id, $class) {
 		$this->packetPool100[$id] = new $class;
+	}
+
+	public function registerPacket91($id, $class) {
+		$this->packetPool91[$id] = new $class;
 	}
 
 	public function getServer() {
