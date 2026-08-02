@@ -24,6 +24,7 @@
  */
 namespace pocketmine\network;
 
+use Info91;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\AddHangingEntityPacket;
 use pocketmine\network\protocol\AddItemEntityPacket;
@@ -61,6 +62,7 @@ use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\HurtArmorPacket;
 use pocketmine\network\protocol\Info;
 use pocketmine\network\protocol\Info100;
+use pocketmine\network\protocol\Info91;
 use pocketmine\network\protocol\InteractPacket;
 use pocketmine\network\protocol\InventoryActionPacket;
 use pocketmine\network\protocol\ItemFrameDropItemPacket;
@@ -303,6 +305,8 @@ class Network {
 		/** @var DataPacket $class */
 		if (in_array($protocol, Info100::ACCEPTED_PROTOCOLS)) {
 		    $class = $this->packetPool100[$id];
+		} elseif(in_array($protocol, Info91::ACCEPTED_PROTOCOLS)) {
+			$class = $this->packetPool91[$id];
 		} else {
 		    $class = $this->packetPool[$id];
 		}
@@ -315,6 +319,8 @@ class Network {
 	public function getPacketId($class, $protocol) {
 		if (in_array($protocol, Info100::ACCEPTED_PROTOCOLS)) {
 		    $id = array_search(new $class, $this->packetPool100);
+		} elseif (in_array($protocol, Info91::ACCEPTED_PROTOCOLS)) {
+			$id = array_search(new $class, $this->packetPool91);
 		} else {
 		    $id = array_search(new $class, $this->packetPool);
 		}
@@ -521,5 +527,8 @@ class Network {
 		$this->registerPacket100(Info::UPDATE_BLOCK_PACKET, UpdateBlockPacket::class);
 		$this->registerPacket100(Info100::UPDATE_TRADE_PACKET, UpdateTradePacket::class);
 		$this->registerPacket100(Info100::USE_ITEM_PACKET, UseItemPacket::class);
+
+		$this->registerPacket91(0x01, LoginPacket::class);
+		$this->registerPacket91(0x02, PlayStatusPacket::class);
 	}
 }

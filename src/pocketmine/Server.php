@@ -24,6 +24,7 @@
 
 namespace pocketmine;
 
+use Info91 as GlobalInfo91;
 use pocketmine\block\Block;
 use pocketmine\command\CommandReader;
 use pocketmine\command\CommandSender;
@@ -83,6 +84,7 @@ use pocketmine\network\protocol\BatchPacket;
 use pocketmine\network\protocol\DataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
 use pocketmine\network\protocol\Info100;
+use pocketmine\network\protocol\Info91;
 use pocketmine\network\protocol\PlayerListPacket;
 use pocketmine\network\query\QueryHandler;
 use pocketmine\network\RakLibInterface;
@@ -2547,6 +2549,8 @@ class Server{
 		$protocol = $player->getProtocol();
 		if (in_array($protocol, Info100::ACCEPTED_PROTOCOLS)) {
 		    $protocol = Info100::CURRENT_PROTOCOL;
+		} elseif (in_array($protocol, Info91::ACCEPTED_PROTOCOLS)) {
+			$protocol = Info91::CURRENT_PROTOCOL;
 		} else {
 		    $protocol = ProtocolInfo::CURRENT_PROTOCOL;
 		}

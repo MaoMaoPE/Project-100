@@ -23,8 +23,7 @@ use pocketmine\event\Timings;
 use pocketmine\item\Item;
 use pocketmine\item\Potion;
 use pocketmine\network\protocol\CraftingDataPacket;
-use pocketmine\network\protocol\Info;
-use pocketmine\network\protocol\Info100;
+use pocketmine\network\protocol\{Info, Info100, Info91};
 use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\MainLogger;
@@ -93,6 +92,7 @@ class CraftingManager{
 
 		$this->buildCraftingDataCache(Info::CURRENT_PROTOCOL);
 		$this->buildCraftingDataCache(Info100::CURRENT_PROTOCOL);
+		$this->buildCraftingDataCache(Info91::CURRENT_PROTOCOL);
 	}
 
 	/**

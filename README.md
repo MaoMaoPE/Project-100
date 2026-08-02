@@ -1,4 +1,4 @@
-Project 100 (GenisysGT)
+Sunshine (GenisysGT)
 ===================
 
 一个 Minecraft：PE 1.0.0 -> 1.0.9 的互通服务端
