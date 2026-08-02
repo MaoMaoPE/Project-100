@@ -128,7 +128,7 @@ class BanList{
 		}
 	}
 
-	public function load(){
+		public function load(){
 		$this->list = [];
 		$fp = @fopen($this->file, "r");
 		if(is_resource($fp)){
@@ -146,6 +146,9 @@ class BanList{
 		}
 	}
 
+	/**
+	 * @param bool $flag
+	 */
 	public function save($flag = true){
 		$this->removeExpired();
 		$fp = @fopen($this->file, "w");
@@ -163,5 +166,6 @@ class BanList{
 			MainLogger::getLogger()->error("Could not save ban list");
 		}
 	}
+
 
 }
