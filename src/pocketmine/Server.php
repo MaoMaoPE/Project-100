@@ -1798,17 +1798,17 @@ class Server{
 
 			$this->operators = new Config($this->dataPath . "ops.txt", Config::ENUM);
 			$this->whitelist = new Config($this->dataPath . "white-list.txt", Config::ENUM);
-			if(file_exists($this->dataPath . "banned.jsonc") and !file_exists($this->dataPath . "banned-players.jsonc")){
-				@rename($this->dataPath . "banned.jsonc", $this->dataPath . "banned-players.jsonc");
+			if(file_exists($this->dataPath . "banned.txt") and !file_exists($this->dataPath . "banned-players.txt")){
+				@rename($this->dataPath . "banned.txt", $this->dataPath . "banned-players.txt");
 			}
-			@touch($this->dataPath . "banned-players.jsonc");
-			$this->banByName = new BanList($this->dataPath . "banned-players.jsonc");
+			@touch($this->dataPath . "banned-players.txt");
+			$this->banByName = new BanList($this->dataPath . "banned-players.txt");
 			$this->banByName->load();
-			@touch($this->dataPath . "banned-ips.jsonc");
-			$this->banByIP = new BanList($this->dataPath . "banned-ips.jsonc");
+			@touch($this->dataPath . "banned-ips.txt");
+			$this->banByIP = new BanList($this->dataPath . "banned-ips.txt");
 			$this->banByIP->load();
-			@touch($this->dataPath . "banned-cids.jsonc");
-			$this->banByCID = new BanList($this->dataPath . "banned-cids.jsonc");
+			@touch($this->dataPath . "banned-cids.txt");
+			$this->banByCID = new BanList($this->dataPath . "banned-cids.txt");
 			$this->banByCID->load();
 
 			$this->maxPlayers = $this->getConfigInt("max-players", 20);
