@@ -1520,6 +1520,11 @@ class Server{
 	public function about(){
 	 	$version = implode(",",ProtocolInfo::MINECRAFT_VERSION);
 		$string = "
+	 ____                          _       _                
+	/ ___|   _   _   _ __    ___  | |__   (_)  _ __     ___ 
+	\___ \  | | | | | '_ \  / __| | '_ \  | | | '_ \   / _ \
+	 ___) | | |_| | | | | | \__ \ | | | | | | | | | | |  __/
+	|____/   \__,_| |_| |_| |___/ |_| |_| |_| |_| |_|  \___|                                                           
 
 	Version: §b" . $this->getPocketMineVersion() . '§f (hash: §b' . $this->getShortGitCommit() . '§f) (codename: §b' . $this->getCodename() . '§f)
 	Client Version: §b' . $version . '§f
