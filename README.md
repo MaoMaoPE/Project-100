@@ -3,7 +3,7 @@ Sunshine (GenisysGT)
 
 一个 Minecraft：PE 0.16.0 -> 1.0.9 的互通服务端
 
-启动此核心需要 [PHP 8.0](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.0-latest), 也可以选择 [PHP 8.2](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.2-latest)
+启动此服务端需要 [PHP 8.0](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.0-latest), 也可以选择 [PHP 8.2](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.2-latest)
 
 服务端已放弃支持 PHP 7.x
 
