@@ -24,7 +24,6 @@
  */
 namespace pocketmine\network;
 
-use Info91;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\AddHangingEntityPacket;
 use pocketmine\network\protocol\AddItemEntityPacket;
@@ -363,6 +362,7 @@ class Network {
 	}
 
 	private function registerPackets() {
+		// 1.0.5 -> 1.0.9
 		$this->registerPacket(Info::ADD_ENTITY_PACKET, AddEntityPacket::class);
 		$this->registerPacket(Info::ADD_HANGING_ENTITY_PACKET, AddHangingEntityPacket::class);
 		$this->registerPacket(Info::ADD_ITEM_ENTITY_PACKET, AddItemEntityPacket::class);
@@ -448,6 +448,7 @@ class Network {
 		$this->registerPacket(Info::SET_TITLE_PACKET, SetTitlePacket::class);
 		$this->registerPacket(Info::STOP_SOUND_PACKET, StopSoundPacket::class);
 
+		// 1.0.0 -> 1.0.4
 	    $this->registerPacket100(Info::ADD_ENTITY_PACKET, AddEntityPacket::class);
 		$this->registerPacket100(Info::ADD_HANGING_ENTITY_PACKET, AddHangingEntityPacket::class);
 		$this->registerPacket100(Info::ADD_ITEM_ENTITY_PACKET, AddItemEntityPacket::class);
@@ -528,7 +529,16 @@ class Network {
 		$this->registerPacket100(Info100::UPDATE_TRADE_PACKET, UpdateTradePacket::class);
 		$this->registerPacket100(Info100::USE_ITEM_PACKET, UseItemPacket::class);
 
+		// 0.16.x
 		$this->registerPacket91(0x01, LoginPacket::class);
 		$this->registerPacket91(0x02, PlayStatusPacket::class);
+		$this->registerPacket91(0x03, ServerToClientHandshakePacket::class);
+		$this->registerPacket100(0x04, ClientToServerHandshakePacket::class);
+		$this->registerPacket91(0x05, DisconnectPacket::class);
+		$this->registerPacket91(0x06, TextPacket::class);
+		$this->registerPacket91(0x07, \pocketmine\Network\protocol\p91\ResourcePacksInfoPacket::class);
+		//$this->registerPacket91();
+		//$this->registerPacket91();
+		//$this->registerPacket91();
 	}
 }
