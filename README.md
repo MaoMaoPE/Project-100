@@ -3,26 +3,11 @@ Sunshine (GenisysGT)
 
 一个 Minecraft：PE 0.16.0 -> 1.0.9 的互通服务端
 
-启动此核心需要[PHP 8.0](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.0-latest)
+启动此核心需要 [PHP 8.0](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.0-latest), 也可以选择 [PHP 8.2](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.2-latest)
 
-也可以选择[PHP 8.2](https://github.com/pmmp/PHP-Binaries/releases/tag/pm4-php-8.2-latest)
+服务端已放弃支持 PHP 7.x
 
-本服务端不支持PHP 7.x
-
-目前正在修复BUG
-
-
-目前正在修复:
--------------
-1. 一些生物相关
-2. 输入/ver(或/version)指令会多次发包导致客户端收到多条消息
-3. 末地传送门: 
-		放不了眼睛，
-		放置末影之眼退出重进后消失,
-		无法激活并传送	
-		...
-4. 0.16的崩溃问题等
-	
+目前服务端不太稳定, 欢迎到 Issues 里面提交你发现的 BUG
 
 许可协议
 -------------

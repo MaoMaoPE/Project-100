@@ -1,22 +1,22 @@
 <?php
 
 /*
- *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
- *
+ * 
+ *  ____                          _       _                
+ * / ___|   _   _   _ __    ___  | |__   (_)  _ __     ___ 
+ * \___ \  | | | | | '_ \  / __| | '_ \  | | | '_ \   / _ \
+ *  ___) | | |_| | | | | | \__ \ | | | | | | | | | | |  __/
+ * |____/   \__,_| |_| |_| |___/ |_| |_| |_| |_| |_|  \___|
+ *                                                               
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
+ * @author MaoMaoPE Team
+ * @link https://github.com/MaoMaoPE/Sunshine
  *
- *
+ * 
 */
 
 declare(strict_types=1);
@@ -60,8 +60,11 @@ class EndPortalFrame extends Solid implements SolidLight{
 		return false;
 	}
 
-	protected function recalculateBoundingBox() : ?AxisAlignedBB{
+	public function canBeActivated() : bool{
+		return true;
+	}
 
+	protected function recalculateBoundingBox() : ?AxisAlignedBB{
 		return new AxisAlignedBB(
 			$this->x,
 			$this->y,
@@ -94,7 +97,7 @@ class EndPortalFrame extends Solid implements SolidLight{
 		}elseif($item->getId() !== Item::EYE_OF_ENDER && ($this->getDamage() & 0x04) === 4){
 			$this->setDamage($this->getDamage() & 0x04 - 4);
 			$this->eye = false;
-			$this->getLevel()->dropItem($this->add(0.5, 0.75, 0.5), Item::get(Item::EYE_OF_ENDER)); //应该是这个函数有点问题 
+			$this->getLevel()->dropItem($this->add(0.5, 0.75, 0.5), Item::get(Item::EYE_OF_ENDER));
 			$this->tryDestroyingPortal($this);
 		}
 		return true;
@@ -124,10 +127,9 @@ class EndPortalFrame extends Solid implements SolidLight{
 	}
 
 	public function createPortal(Block $center) : void{
-		$pos = $center->asPosition();
 		for($i = -1; $i <= 1; ++$i){
 			for($j = -1; $j <= 1; ++$j){
-				$this->getLevel()->setBlock(new Vector3($pos->x + $i, $pos->y, $pos->z + $j), Block::get(Block::END_PORTAL, 0), false);
+				$this->getLevel()->setBlock(new Vector3($center->x + $i, $center->y, $center->z + $j), Block::get(Block::END_PORTAL, 0), false);
 			}
 		}
 	}
@@ -144,12 +146,11 @@ class EndPortalFrame extends Solid implements SolidLight{
 	}
 
 	public function destroyPortal(Block $center) : void{
-		$pos = $center->asPosition(); //移植过来的，不知道这是什么滚木函数
-		$level = $pos->getLevel();
+		$level = $center->getLevel();
 		for($i = -1; $i <= 1; ++$i){
 			for($j = -1; $j <= 1; ++$j){
-				if($level->getBlockAt($pos->x + $i, $pos->y, $pos->z + $j)->getId() === Block::END_PORTAL){
-					$level->setBlock(new Vector3($pos->x + $i, $pos->y, $pos->z + $j), Block::get(Block::AIR), false);
+				if($level->getBlockAt($center->x + $i, $center->y, $center->z + $j)->getId() === Block::END_PORTAL){
+					$level->setBlock(new Vector3($center->x + $i, $center->y, $center->z + $j), Block::get(Block::AIR), false);
 				}
 			}
 		}

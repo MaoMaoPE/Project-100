@@ -1,30 +1,26 @@
 <?php
 
 /*
- *
- *  _____            _               _____           
- * / ____|          (_)             |  __ \          
- *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___  
- *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \ 
- *| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
- * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/ 
- *                         __/ |                    
- *                        |___/                     
- *
+ * 
+ *  ____                          _       _                
+ * / ___|   _   _   _ __    ___  | |__   (_)  _ __     ___ 
+ * \___ \  | | | | | '_ \  / __| | '_ \  | | | '_ \   / _ \
+ *  ___) | | |_| | | | | | \__ \ | | | | | | | | | | |  __/
+ * |____/   \__,_| |_| |_| |___/ |_| |_| |_| |_| |_|  \___|
+ *                                                               
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author GenisysPro
- * @link https://github.com/GenisysPro/GenisysPro
+ * @author MaoMaoPE Team
+ * @link https://github.com/MaoMaoPE/Sunshine
  *
- *
+ * 
 */
 
 namespace pocketmine;
 
-use Info91 as GlobalInfo91;
 use pocketmine\block\Block;
 use pocketmine\command\CommandReader;
 use pocketmine\command\CommandSender;
@@ -193,7 +189,7 @@ class Server{
 	/** @var CraftingManager */
 	private $craftingManager;
 
- private $resourceManager;
+    private $resourceManager;
 
 	/** @var ConsoleCommandSender */
 	private $consoleSender;
@@ -1530,7 +1526,6 @@ class Server{
 	PHP Version: §b' . PHP_VERSION . '§f
 	OS: §b' . PHP_OS .'§f
 	This core is maintained by §bGenisysPro§f (https://github.com/GenisysPro)
-	Discord Group chat: §bhttps://discord.gg/WrKzRNn §f
 	';
 	
 		$this->getLogger()->info($string);
@@ -2097,7 +2092,6 @@ class Server{
                 break;
             }
         }
-
         $packet->encode($protocol ?? ProtocolInfo::CURRENT_PROTOCOL);
         $packet->isEncoded = true;
 
@@ -2126,13 +2120,42 @@ class Server{
 
         $targets = [];
         $protocol = null;
+        $protocolMismatch = false;
         foreach($players as $p){
             if($p->isConnected()){
-                $targets[] = $this->identifiers[spl_object_hash($p)];
+                $id = $this->identifiers[spl_object_hash($p)];
+                $targets[$id] = $id;
+                $playerProtocol = $p->getProtocol();
                 if($protocol === null){
-                    $protocol = $p->getProtocol();
+                    $protocol = $playerProtocol;
+                }elseif($protocol !== $playerProtocol){
+                    $protocolMismatch = true;
                 }
             }
+        }
+
+        if($protocolMismatch){
+            foreach($players as $p){
+                if($p->isConnected()){
+                    $playerProtocol = $p->getProtocol();
+                    foreach($packets as $pk){
+                        if($pk instanceof DataPacket){
+                            if(!$pk->isEncoded){
+                                $pk->encode($playerProtocol);
+                            }
+                            $p->dataPacket($pk);
+                        }else{
+                            $tmp = new BatchPacket();
+                            $tmp->payload = zlib_encode($pk, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel);
+                            $tmp->encode($playerProtocol);
+                            $tmp->isEncoded = true;
+                            $p->dataPacket($tmp);
+                        }
+                    }
+                }
+            }
+            Timings::$playerNetworkTimer->stopTiming();
+            return;
         }
 
         $str = "";
@@ -2147,6 +2170,7 @@ class Server{
             }
         }
 
+        $targets = array_values($targets);
         if(!$forceSync and $this->networkCompressionAsync){
             $task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
             $this->getScheduler()->scheduleAsyncTask($task);
@@ -2162,27 +2186,17 @@ class Server{
     }
 
     public function broadcastPacketsCallback($data, array $identifiers, $protocol = null){
-        if($protocol === null){
-            foreach($identifiers as $i){
-                if(isset($this->players[$i])){
-                    $protocol = $this->players[$i]->getProtocol();
-                    break;
-                }
-            }
-        }
-
-        $pk = new BatchPacket();
-        $pk->payload = $data;
-        $pk->encode($protocol);
-        $pk->isEncoded = true;
-
         foreach($identifiers as $i){
             if(isset($this->players[$i])){
+                $playerProtocol = $this->players[$i]->getProtocol();
+                $pk = new BatchPacket();
+                $pk->payload = $data;
+                $pk->encode($playerProtocol);
+                $pk->isEncoded = true;
                 $this->players[$i]->dataPacket($pk);
             }
         }
     }
-
 
 	/**
 	 * @param int $type

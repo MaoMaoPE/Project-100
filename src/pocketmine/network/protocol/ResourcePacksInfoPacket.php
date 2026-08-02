@@ -44,7 +44,7 @@ class ResourcePacksInfoPacket extends DataPacket{
 		$this->reset($protocol);
 
 		$this->putBool($this->mustAccept);
-		$this->putLShort(count($this->behaviorPackEntries));
+	    $this->putLShort(count($this->behaviorPackEntries));
 		foreach($this->behaviorPackEntries as $entry){
 			$this->putString($entry->getPackId());
 			$this->putString($entry->getPackVersion());

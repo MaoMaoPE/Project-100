@@ -864,10 +864,15 @@ class Chunk{
 	 */
 	public function networkSerialize() : string{
 		$result = "";
-		$subChunkCount = $this->getSubChunkSendCount();
+		//$subChunkCount = $this->getSubChunkSendCount();
+		$subChunkCount = 8; //即使是空白子区块也发包
 		$result .= chr($subChunkCount);
-		for($y = 0; $y < $subChunkCount; ++$y){
-			$result .= $this->subChunks[$y]->networkSerialize();
+		for($y = 0; $y < $subChunkCount; ++$y){ 
+            if (!isset($this->subChunks[$y]) || $this->subChunks[$y] instanceof EmptySubChunk) {
+                $result .= (new SubChunk())->networkSerialize();
+            } else {
+                $result .= $this->subChunks[$y]->networkSerialize();
+            }
 		}
 		$result .= pack("v*", ...$this->heightMap)
 		        .  $this->biomeIds
