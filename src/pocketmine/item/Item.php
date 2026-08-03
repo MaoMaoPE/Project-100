@@ -279,9 +279,9 @@ class Item implements ItemIds, \JsonSerializable{
 
 		self::clearCreativeItems();
 
-		if (in_array($player->getProtocol(), Info::ACCEPTED_PROTOCOLS_LESS_92)) {
+		if ($player->getProtocol() === Info::ACCEPTED_PROTOCOLS_LESS_91) {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems91.json", Config::JSON, []);
-		} elseif (in_array($player->getProtocol(), Info::ACCEPTED_PROTOCOLS_LESS_107)) {
+		} else {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
 		}
 
