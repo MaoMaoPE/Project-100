@@ -48,7 +48,7 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
-use pocketmine\network\protocol\Info;
+use pocketmine\network\protocol\Info91;
 use pocketmine\utils\Config;
 
 class Item implements ItemIds, \JsonSerializable{
@@ -279,7 +279,7 @@ class Item implements ItemIds, \JsonSerializable{
 
 		self::clearCreativeItems();
 
-		if ($player->getProtocol() === Info::ACCEPTED_PROTOCOLS_LESS_91) {
+		if ($player->getProtocol() === Info91::CURRENT_PROTOCOL) {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems91.json", Config::JSON, []);
 		} else {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
