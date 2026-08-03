@@ -276,10 +276,11 @@ class Item implements ItemIds, \JsonSerializable{
 	private static function initCreativeItems(){
 		/** @var Player */
 		$player = null;
+		$protocols = $player->getProtocol();
 
 		self::clearCreativeItems();
 
-		if ($player->getProtocol() === Info91::CURRENT_PROTOCOL) {
+		if ($protocols === Info91::CURRENT_PROTOCOL) {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems91.json", Config::JSON, []);
 		} else {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
