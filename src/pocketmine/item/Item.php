@@ -280,7 +280,7 @@ class Item implements ItemIds, \JsonSerializable{
 
 		self::clearCreativeItems();
 
-		if ($protocols === Info91::CURRENT_PROTOCOL) {
+		if ($protocols == Info91::CURRENT_PROTOCOL) {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems91.json", Config::JSON, []);
 		} else {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
