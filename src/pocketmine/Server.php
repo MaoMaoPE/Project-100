@@ -1530,7 +1530,8 @@ class Server{
 	Client Version: §b' . $version . '§f
 	PHP Version: §b' . PHP_VERSION . '§f
 	OS: §b' . PHP_OS .'§f
-	This core is maintained by §bGenisysPro§f (https://github.com/GenisysPro)
+	This core is maintained by §bMaoMaoPE§f (https://github.com/MaoMaoPE)
+	And this server is cloned from §bGenisysPro§f (https://github.com/GenisysPro)
 	';
 	
 		$this->getLogger()->info($string);
