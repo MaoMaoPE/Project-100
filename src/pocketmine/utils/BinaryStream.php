@@ -169,7 +169,7 @@ class BinaryStream extends \stdClass{
 	}
 
 	public function getByte(){
-		return ord($this->buffer[$this->offset++]);
+		return ord($this->get(1));
 	}
 
 	public function putByte($v){
