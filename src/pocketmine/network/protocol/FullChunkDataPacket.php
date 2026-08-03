@@ -39,7 +39,7 @@ class FullChunkDataPacket extends DataPacket{
 		$this->reset($protocol);
 		$this->putVarInt($this->chunkX);
 		$this->putVarInt($this->chunkZ);
-		if (in_array($protocol, Info::ACCEPTED_PROTOCOLS_LESS_92)) {
+		if (in_array($protocol, Info::ACCEPTED_PROTOCOLS_LESS_91)) {
 		    $this->putByte(0); //ORDER_COLUMNS
 		    $this->putString(ChunkNetworkConverter::convertToP91($this->data));
 		} else {

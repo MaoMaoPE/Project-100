@@ -51,7 +51,7 @@ interface Info{
 
 	public const ACCEPTED_PROTOCOLS_LESS_107 = [100, 101, 102, 105, 106, 107];
     public const ACCEPTED_PROTOCOLS_LESS_102 = [91, 100, 101, 102];
-    public const ACCEPTED_PROTOCOLS_LESS_91 = 91;
+    public const ACCEPTED_PROTOCOLS_LESS_91 = [91];
 
 	public const LOGIN_PACKET = 0x01;
 	public const PLAY_STATUS_PACKET = 0x02;
