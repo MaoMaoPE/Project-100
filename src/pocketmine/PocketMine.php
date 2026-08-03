@@ -459,7 +459,7 @@ namespace pocketmine {
 	}
 
 	if(\Phar::running(true) === ""){
-		$logger->warning("Non-packaged Genisys installation detected, do not use on production.");
+		$logger->warning("Non-packaged Sunshine installation detected, do not use on production.");
 	}
 
 	ThreadManager::init();

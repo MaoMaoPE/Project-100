@@ -71,7 +71,7 @@ class ExtractPluginCommand extends VanillaCommand{
 			return true;
 		}
 
-		$folderPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "GenisysGT" . DIRECTORY_SEPARATOR . $description->getName()."_v".$description->getVersion()."/";
+		$folderPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "Sunshine" . DIRECTORY_SEPARATOR . $description->getName()."_v".$description->getVersion()."/";
 		if(file_exists($folderPath)){
 			$sender->sendMessage("Plugin already exists, overwriting...");
 		}else{
