@@ -275,16 +275,16 @@ class Item implements ItemIds, \JsonSerializable{
 
 	private static function initCreativeItems(){
 		/** @var Player */
-		$player = null;
-		$protocols = $player->getProtocol();
+		//$player = null;
+		//$protocols = $player->getProtocol();
 
 		self::clearCreativeItems();
 
-		if ($protocols == Info91::CURRENT_PROTOCOL) {
-			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems91.json", Config::JSON, []);
-		} else {
+		//if ($protocols == Info91::CURRENT_PROTOCOL) {
+		//	$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems91.json", Config::JSON, []);
+		//} else {
 			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
-		}
+		//}
 
 		foreach($creativeItems->getAll() as $data){
 			$item = Item::get($data["id"], $data["damage"], $data["count"], $data["nbt"]);
