@@ -49,6 +49,7 @@ interface Info{
 	public const MINECRAFT_VERSION = ["v0.16.0", "v1.0.0", "v1.0.3", "v1.0.4", "v1.0.5", "v1.0.6", "v1.0.7"];
 	public const MINECRAFT_VERSION_NETWORK = "1.0";
 
+	public const ACCEPTED_PROTOCOLS_LESS_107 = [100, 101, 102, 105, 106, 107];
     public const ACCEPTED_PROTOCOLS_LESS_102 = [91, 100, 101, 102];
     public const ACCEPTED_PROTOCOLS_LESS_92 = [91];
 

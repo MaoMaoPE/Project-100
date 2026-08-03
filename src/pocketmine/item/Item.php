@@ -48,6 +48,7 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
+use pocketmine\network\protocol\Info;
 use pocketmine\utils\Config;
 
 class Item implements ItemIds, \JsonSerializable{
@@ -273,9 +274,16 @@ class Item implements ItemIds, \JsonSerializable{
 	private static $creative = [];
 
 	private static function initCreativeItems(){
+		/** @var Player */
+		$player = null;
+
 		self::clearCreativeItems();
 
-		$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
+		if (in_array($player->getProtocol(), Info::ACCEPTED_PROTOCOLS_LESS_92)) {
+			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems91.json", Config::JSON, []);
+		} elseif (in_array($player->getProtocol(), Info::ACCEPTED_PROTOCOLS_LESS_107)) {
+			$creativeItems = new Config(Server::getInstance()->getFilePath() . "src/pocketmine/resources/creativeitems.json", Config::JSON, []);
+		}
 
 		foreach($creativeItems->getAll() as $data){
 			$item = Item::get($data["id"], $data["damage"], $data["count"], $data["nbt"]);
