@@ -32,10 +32,10 @@ namespace pocketmine {
 	use pocketmine\utils\Utils;
 	use pocketmine\wizard\Installer;
 
-	const NAME = "GenisysGT";
+	const NAME = "Sunshine";
 	const VERSION = "1.3dev";
 	const API_VERSION = "3.0.1";
-	const CODENAME = "Sunshine";
+	const CODENAME = "Northumberland";
 	const GENISYS_API_VERSION = '2.0.0';
 
 	/*
