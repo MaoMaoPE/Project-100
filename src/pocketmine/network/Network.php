@@ -405,6 +405,7 @@ class Network {
 		$this->registerPacket(Info::LOGIN_PACKET, LoginPacket::class);
 		$this->registerPacket(Info::MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class);
 		$this->registerPacket(Info::MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class);
+		$this->registerPacket(Info::MOB_EFFECT_PACKET, MobEffectPacket::class);
 		$this->registerPacket(Info::MOB_EQUIPMENT_PACKET, MobEquipmentPacket::class);
 		$this->registerPacket(Info::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
 		$this->registerPacket(Info::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
@@ -490,6 +491,7 @@ class Network {
 		$this->registerPacket100(Info100::LOGIN_PACKET, LoginPacket::class);
 		$this->registerPacket100(Info100::MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class);
 		$this->registerPacket100(Info100::MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class);
+		$this->registerPacket100(Info100::MOB_EFFECT_PACKET, MobEffectPacket::class);
 		$this->registerPacket100(Info100::MOB_EQUIPMENT_PACKET, MobEquipmentPacket::class);
 		$this->registerPacket100(Info100::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
 		$this->registerPacket100(Info100::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
@@ -575,6 +577,7 @@ class Network {
 		$this->registerPacket91(Info91::LOGIN_PACKET, LoginPacket::class);
 		$this->registerPacket91(Info91::MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket::class);
 		$this->registerPacket91(Info91::MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket::class);
+		$this->registerPacket91(Info91::MOB_EFFECT_PACKET, MobEffectPacket::class);
 		$this->registerPacket91(Info91::MOB_EQUIPMENT_PACKET, MobEquipmentPacket::class);
 		$this->registerPacket91(Info91::MOVE_ENTITY_PACKET, MoveEntityPacket::class);
 		$this->registerPacket91(Info91::MOVE_PLAYER_PACKET, MovePlayerPacket::class);
