@@ -344,7 +344,7 @@ class Item implements ItemIds, \JsonSerializable{
 
 	public static function get(int $id = 0, int $meta = 0, int $count = 1, string $tags = "") : Item{
 		try{
-			$class = self::$list[$id];
+			$class = self::$list[$id] ?? null;
 			if($class === null){
 				return (new Item($id, $meta, $count))->setCompoundTag($tags);
 			}elseif($id < 256){
