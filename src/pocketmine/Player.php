@@ -172,16 +172,16 @@ use pocketmine\utils\UUID;
  */
 class Player extends Human implements CommandSender, InventoryHolder, ChunkLoader, IPlayer{
 
-	const SURVIVAL = 0;
-	const CREATIVE = 1;
-	const ADVENTURE = 2;
-	const SPECTATOR = 3;
-	const VIEW = Player::SPECTATOR;
+	public const SURVIVAL = 0;
+	public const CREATIVE = 1;
+	public const ADVENTURE = 2;
+	public const SPECTATOR = 3;
+	public const VIEW = Player::SPECTATOR;
 
-	const CRAFTING_SMALL = 0;
-	const CRAFTING_BIG = 1;
-	const CRAFTING_ANVIL = 2;
-	const CRAFTING_ENCHANT = 3;
+	public const CRAFTING_SMALL = 0;
+	public const CRAFTING_BIG = 1;
+	public const CRAFTING_ANVIL = 2;
+	public const CRAFTING_ENCHANT = 3;
 
 	/** @var SourceInterface */
 	protected $interface;

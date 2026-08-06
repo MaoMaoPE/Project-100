@@ -29,15 +29,18 @@ use pocketmine\utils\Config;
 use pocketmine\utils\Utils;
 
 class Installer{
-	const DEFAULT_NAME = "Minecraft: PE Server";
-	const DEFAULT_PORT = 19132;
-	const DEFAULT_MEMORY = 512;
-	const DEFAULT_PLAYERS = 20;
-	const DEFAULT_GAMEMODE = 0;
-	const DEFAULT_LEVEL_NAME = "world";
-	const DEFAULT_LEVEL_TYPE = "DEFAULT";
+
+	public $lang;
+
+	public const DEFAULT_NAME = "Minecraft: PE Server";
+	public const DEFAULT_PORT = 19132;
+	public const DEFAULT_MEMORY = 512;
+	public const DEFAULT_PLAYERS = 20;
+	public const DEFAULT_GAMEMODE = 0;
+	public const DEFAULT_LEVEL_NAME = "world";
+	public const DEFAULT_LEVEL_TYPE = "DEFAULT";
 	
-	const LEVEL_TYPES = [
+	public const LEVEL_TYPES = [
 		"DEFAULT",
 		"FLAT",
 		"NORMAL",
@@ -53,7 +56,7 @@ class Installer{
 	}
 
 	public function run(){
-		echo "[*] GenisysPro set-up wizard\n";
+		echo "[*] Sunshine set-up wizard\n";
 		echo "[*] Please select a language:\n";
 		foreach(InstallerLang::$languages as $short => $native){
 			echo " $native => $short\n";
