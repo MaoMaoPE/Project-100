@@ -74,7 +74,7 @@ class ZippedResourcePack implements ResourcePack{
 			throw new \InvalidStateException("打开 $zipPath 时遇到ZipArchive错误 $openResult");
 		}
 
-		if(($manifestData = $archive->getFromName("manifest.json")) === false or ($manifestData = $archive->getFromName("pack_manifest.json")) === false){
+		if(($manifestData = $archive->getFromName("manifest.json")) === false && ($manifestData = $archive->getFromName("pack_manifest.json")) === false){
 			throw new \InvalidStateException("无法加载材质包 $zipPath: 找不到主类");
 		}
 
