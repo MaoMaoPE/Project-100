@@ -50,6 +50,20 @@ class ZippedResourcePack implements ResourcePack{
 			count($manifest->header->version) === 3;
 	}
 
+	public static function verifyManifestOld(\stdClass $manifest) {
+		if(!isset($manifest->header)) return false;
+
+		return
+		 	isset($manifest->header->pack_id) and
+			isset($manifest->header->name) and 
+			isset($manifest->header->packs_version) and
+			isset($manifest->header->description) and
+			isset($manifets->header->modules->description) and
+			isset($manifets->header->modules->version) and
+			isset($manifets->header->modules->uuid) and 
+			isset($manifets->header->modules->type);
+	}
+
 	/** @var string */
 	protected $path;
 
@@ -81,7 +95,7 @@ class ZippedResourcePack implements ResourcePack{
 		$archive->close();
 
 		$manifest = json_decode($manifestData);
-		if($manifest == null || !self::verifyManifest($manifest)){
+		if(($manifest == null || !self::verifyManifest($manifest)) && ($manifest == null || !self::verifyManifestOld($manifest))){
 			throw new \InvalidStateException("无法加载材质包 $zipPath: 主类错误或不完整，如果主类没有错误，请检查是否有注释并删除注释");
 		}
 
