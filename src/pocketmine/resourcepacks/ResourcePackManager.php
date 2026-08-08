@@ -100,7 +100,7 @@ class ResourcePackManager{
 
 					if($newPack instanceof ResourcePack){
 						$this->resourcePacks[] = $newPack;
-						$this->uuidList[$newPack->getPackId()] && $this->uuidList[$newPack->getOldPackId()] = $newPack;
+						$this->uuidList[$newPack->getPackId()] = $newPack;
 					}
 				}else{
 					$this->server->getLogger()->warning($this->server->getLanguage()->translateString("pocketmine.resourcepacks.packNotFound", [$path]));
