@@ -32,15 +32,15 @@ class Installer{
 
 	public $lang;
 
-	public const DEFAULT_NAME = "Minecraft: PE Server";
-	public const DEFAULT_PORT = 19132;
-	public const DEFAULT_MEMORY = 512;
-	public const DEFAULT_PLAYERS = 20;
-	public const DEFAULT_GAMEMODE = 0;
-	public const DEFAULT_LEVEL_NAME = "world";
-	public const DEFAULT_LEVEL_TYPE = "DEFAULT";
+	const DEFAULT_NAME = "Minecraft: PE Server";
+	const DEFAULT_PORT = 19132;
+	const DEFAULT_MEMORY = 512;
+	const DEFAULT_PLAYERS = 20;
+	const DEFAULT_GAMEMODE = 0;
+	const DEFAULT_LEVEL_NAME = "world";
+	const DEFAULT_LEVEL_TYPE = "DEFAULT";
 	
-	public const LEVEL_TYPES = [
+	const LEVEL_TYPES = [
 		"DEFAULT",
 		"FLAT",
 		"NORMAL",

@@ -26,10 +26,10 @@ namespace pocketmine\utils;
  * Most of the code in this class was adapted from the XorShift128Engine in the php-random library.
  */
 class Random{
-	public const X = 123456789;
-	public const Y = 362436069;
-	public const Z = 521288629;
-	public const W = 88675123;
+	const X = 123456789;
+	const Y = 362436069;
+	const Z = 521288629;
+	const W = 88675123;
 
 	/**
 	 * @var int

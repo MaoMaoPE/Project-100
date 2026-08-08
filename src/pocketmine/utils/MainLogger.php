@@ -43,6 +43,8 @@ class MainLogger extends \AttachableThreadedLogger{
 	public $shouldRecordMsg = false;
 	private $lastGet = 0;
 
+	private $attachment;
+
 	public function setSendMsg($b){
 		$this->shouldRecordMsg = $b;
 		$this->lastGet = time();
