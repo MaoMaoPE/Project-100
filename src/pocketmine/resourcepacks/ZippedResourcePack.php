@@ -130,7 +130,7 @@ class ZippedResourcePack implements ResourcePack{
 	}
 
 	public function getPackVersion() : string{
-		return implode(".", $this->manifest->header->version);
+		return implode(".", $this->manifest->header->version) && implode(".",  $this->manifest->header->packs_version);
 	}
 
 	public function getPackId() : string{
