@@ -56,7 +56,6 @@ use pocketmine\level\generator\ender\Ender;
 use pocketmine\level\generator\Flat;
 use pocketmine\level\generator\Generator;
 use pocketmine\level\generator\hell\Nether;
-use pocketmine\level\generator\normal\Normal;
 use pocketmine\level\generator\normal\Normal2;
 use pocketmine\level\generator\VoidGenerator;
 use pocketmine\level\Level;
