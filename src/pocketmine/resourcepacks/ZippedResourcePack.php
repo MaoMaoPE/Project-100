@@ -51,17 +51,38 @@ class ZippedResourcePack implements ResourcePack{
 	}
 
 	public static function verifyManifestOld(\stdClass $manifest) {
-		if(!isset($manifest->header)) return false;
+		if (!isset($manifest->header) || !is_object($manifest->header)) {
+        	return false;
+    	}
+		$h = $manifest->header;
 
-		return
-		 	isset($manifest->header->pack_id) and
-			isset($manifest->header->name) and 
-			isset($manifest->header->packs_version) and
-			isset($manifest->header->description) and
-			isset($manifets->header->modules->description) and
-			isset($manifets->header->modules->version) and
-			isset($manifets->header->modules->uuid) and 
-			isset($manifets->header->modules->type);
+		// 跟着AI改的，不知道有没有用 QAQ
+		if (!isset($h->pack_id) || !preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $h->pack_id)) {
+        	return false;
+    	}
+		if (empty($h->name) || !is_string($h->name)) {
+        	return false;
+    	}
+		if (empty($h->packs_version) || !is_string($h->packs_version) || !preg_match('/^\d+\.\d+\.\d+$/', $h->packs_version)) {
+        	return false;
+    	}
+		if (!isset($h->modules) || !is_array($h->modules) || count($h->modules) === 0) {
+        	return false;
+    	}
+		foreach ($h->modules as $module) {
+        	if (!is_object($module)) return false;
+        	if (empty($module->uuid) || !preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $module->uuid)) {
+            	return false;
+        	}
+        	if (empty($module->type) || !in_array($module->type, ['resources', 'data'], true)) {
+            	return false;
+        	}
+        	if (isset($module->version) && !is_string($module->version)) {
+        	    return false;
+        	}
+    	}
+    	return true;
+
 	}
 
 	/** @var string */
