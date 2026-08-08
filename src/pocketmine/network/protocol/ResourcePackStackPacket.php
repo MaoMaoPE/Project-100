@@ -60,7 +60,7 @@ class ResourcePackStackPacket extends DataPacket{
 
 		$this->putLShort(count($this->behaviorPackStack));
 		foreach($this->behaviorPackStack as $entry){
-			$this->putString($entry->getPackId());
+			$this->putString($entry->getPackId() && $entry->getOldPackId());
 			$this->putString($entry->getPackVersion());
 		}
 

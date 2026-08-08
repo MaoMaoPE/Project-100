@@ -2308,7 +2308,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 		 					}
 
 		 					$pk = new ResourcePackDataInfoPacket();
-		 					$pk->packId = $pack->getPackId();
+		 					$pk->packId = $pack->getPackId() && $pack->getOldPackId();
 		 					$pk->maxChunkSize = 1048576; //1MB
 		 					$pk->chunkCount = $pack->getPackSize() / $pk->maxChunkSize;
 		 					$pk->compressedPackSize = $pack->getPackSize();
@@ -2338,7 +2338,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
  				}
  
  				$pk = new ResourcePackChunkDataPacket();
- 				$pk->packId = $pack->getPackId();
+ 				$pk->packId = $pack->getPackId() && $pack->getOldPackId();
  				$pk->chunkIndex = $packet->chunkIndex;
  				$pk->data = $pack->getPackChunk(1048576 * $packet->chunkIndex, 1048576);
  				$pk->progress = (1048576 * $packet->chunkIndex);

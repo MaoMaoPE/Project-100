@@ -37,6 +37,8 @@ interface ResourcePack{
 
 	public function getPackId() : string;
 
+	public function getOldPackId(): string;
+
 	public function getPackSize() : int;
 
 	public function getPackVersion() : string;

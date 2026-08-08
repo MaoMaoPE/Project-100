@@ -137,6 +137,10 @@ class ZippedResourcePack implements ResourcePack{
 		return $this->manifest->header->uuid;
 	}
 
+	public function getOldPackId() : string {
+		return $this->manifest->header->pack_id;
+	}
+
 	public function getPackSize() : int{
 		return filesize($this->path);
 	}
